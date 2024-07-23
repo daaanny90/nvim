@@ -83,7 +83,10 @@ return { -- LSP Configuration & Plugins
 
         -- Rename the variable under your cursor.
         --  Most Language Servers support renaming across files, etc.
-        map('<leader>rn', vim.lsp.buf.rename, '[R]e[n]ame')
+        map('<leader>cr', vim.lsp.buf.rename, '[R]ename')
+
+        -- See the attached lsp to the buffer
+        map('<leader>cl', ':LspInfo', '[L]sp info')
 
         -- Execute a code action, usually your cursor needs to be on top of an error
         -- or a suggestion from your LSP for this to activate.
@@ -254,4 +257,18 @@ return { -- LSP Configuration & Plugins
       },
     }
   end,
+  opts = {
+    setup = {
+      -- This configuration is added to use eslint as formatter on save. There where conflicts between eslint and tsserver in herole project
+      eslint = function()
+        require('lazyvim.util').lsp.on_attach(function(client)
+          if client.name == 'eslint' then
+            client.server_capabilities.documentFormattingProvider = true
+          elseif client.name == 'tsserver' then
+            client.server_capabilities.documentFormattingProvider = false
+          end
+        end)
+      end,
+    },
+  },
 }

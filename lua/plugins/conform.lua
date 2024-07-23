@@ -30,7 +30,18 @@ return { -- Autoformat
       --
       -- You can use a sub-list to tell conform to run *until* a formatter
       -- is found.
-      -- javascript = { { "prettierd", "prettier" } },
+      javascript = { 'prettier', 'eslint_d' },
+      scss = { 'prettier' },
+      vue = { 'injected', 'eslint_d' },
+      astro = { 'prettier' },
+    },
+    lang_to_ext = {
+      vue = 'vue',
+    },
+    formatters = {
+      prettier = {
+        prepend_args = { '--single-quote' },
+      },
     },
   },
 }

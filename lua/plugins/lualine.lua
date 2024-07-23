@@ -22,7 +22,7 @@ return {
 
     return {
       options = {
-        theme = 'auto',
+        theme = 'nord',
         globalstatus = true,
         disabled_filetypes = { statusline = { 'dashboard', 'alpha', 'starter' } },
       },
