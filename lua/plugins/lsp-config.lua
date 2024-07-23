@@ -86,7 +86,7 @@ return { -- LSP Configuration & Plugins
         map('<leader>cr', vim.lsp.buf.rename, '[R]ename')
 
         -- See the attached lsp to the buffer
-        map('<leader>cl', ':LspInfo', '[L]sp info')
+        map('<leader>cl', '<cmd>LspInfo<cr>', '[L]sp info')
 
         -- Execute a code action, usually your cursor needs to be on top of an error
         -- or a suggestion from your LSP for this to activate.
