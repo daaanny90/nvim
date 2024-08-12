@@ -11,6 +11,8 @@ vim.opt.smartcase = true
 vim.opt.signcolumn = 'yes' -- Keep signcolumn on by default
 vim.opt.updatetime = 250 -- Decrease update time
 vim.opt.timeoutlen = 300 -- Displays which-key popup sooner
+vim.opt.termguicolors = true
+vim.o.background = 'dark'
 
 -- Configure how new splits should be opened
 vim.opt.splitright = true
@@ -32,3 +34,9 @@ vim.opt.smartindent = true -- insert indents automatically
 vim.opt.tabstop = 2 -- number of spaces tabs count for
 vim.opt.undofile = true
 vim.opt.undolevels = 10000
+
+vim.opt.spell = true
+vim.opt.spelllang = { 'en_us', 'de_de' }
+
+-- do not show the tilde for blank lines
+vim.opt.fillchars = 'eob: '

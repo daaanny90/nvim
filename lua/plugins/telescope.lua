@@ -54,6 +54,17 @@ return { -- Fuzzy Finder (files, lsp, etc)
       --   },
       -- },
       -- pickers = {}
+      defailts = {
+        file_ignore_patterns = {
+          'node_modules',
+          '.git',
+        },
+      },
+      pickers = {
+        oldfiles = {
+          cwd_only = true,
+        },
+      },
       extensions = {
         ['ui-select'] = {
           require('telescope.themes').get_dropdown(),

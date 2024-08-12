@@ -40,3 +40,10 @@ vim.keymap.set({ 'i', 'x', 'n', 's' }, '<C-s>', '<cmd>w<cr><esc>', { desc = 'Sav
 
 vim.keymap.set('n', '<leader>l', '<cmd>Lazy<cr>', { desc = 'Open Lazy' })
 vim.keymap.set('n', '<leader>m', '<cmd>Mason<cr>', { desc = 'Open Mason' })
+
+-- neogen: function documentation generation
+local opts = { noremap = true, silent = true, desc = 'Generate function [D]ocumentation' }
+vim.api.nvim_set_keymap('n', '<Leader>cD', ":lua require('neogen').generate()<CR>", opts)
+
+-- http client kulala keybindings
+

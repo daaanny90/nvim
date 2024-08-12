@@ -1,6 +1,36 @@
+-- fix for solarized osaka coloscheme, comment out if not in use
+local hslutil = require 'solarized-osaka.hsl'
+local hsl = hslutil.hslToHex
+
+local function diff_source()
+  local gitsigns = vim.b.gitsigns_status_dict
+  if gitsigns then
+    return {
+      added = gitsigns.added,
+      modified = gitsigns.changed,
+      removed = gitsigns.removed,
+    }
+  end
+end
+
+local function current_working_dir()
+  local cwd = string.sub(vim.fn.getcwd(), 12)
+  return '~' .. cwd
+end
+
+local function show_macro_recording()
+  local recording_register = vim.fn.reg_recording()
+  if recording_register == '' then
+    return ''
+  else
+    return 'Recording @' .. recording_register
+  end
+end
+
 return {
   'nvim-lualine/lualine.nvim',
   event = 'VeryLazy',
+  lazy = true,
   init = function()
     vim.g.lualine_laststatus = vim.o.laststatus
     if vim.fn.argc(-1) > 0 then
@@ -12,94 +42,56 @@ return {
     end
   end,
   opts = function()
-    -- TODO: find a way to make icons works
-    -- local lualine_require = require 'lualine_require'
-    -- lualine_require.require = require
-
-    -- local icons = require('lazyvim.config').icons
-
     vim.o.laststatus = vim.g.lualine_laststatus
 
     return {
       options = {
-        theme = 'nord',
         globalstatus = true,
         disabled_filetypes = { statusline = { 'dashboard', 'alpha', 'starter' } },
+        always_divide_middle = false,
+        theme = 'auto',
       },
       sections = {
         lualine_a = { 'mode' },
-        lualine_b = { 'branch' },
-
-        lualine_c = {
-          -- TODO: related to icons, find a way to make it work without lazyvim
-
-          -- Util.lualine.root_dir(),
-          -- {
-          --   'diagnostics',
-          --   symbols = {
-          --     error = icons.diagnostics.Error,
-          --     warn = icons.diagnostics.Warn,
-          --     info = icons.diagnostics.Info,
-          --     hint = icons.diagnostics.Hint,
-          -- },
-          -- },
-          -- { 'filetype', icon_only = true, separator = '', padding = { left = 1, right = 0 } },
-          -- { Util.lualine.pretty_path() },
-        },
-        lualine_x = {
-            -- stylua: ignore
-            {
-              function() return require("noice").api.status.command.get() end,
-              cond = function() return package.loaded["noice"] and require("noice").api.status.command.has() end,
-              -- color = Util.ui.fg("Statement"),
-            },
-            -- stylua: ignore
-            {
-              function() return require("noice").api.status.mode.get() end,
-              cond = function() return package.loaded["noice"] and require("noice").api.status.mode.has() end,
-              -- color = Util.ui.fg("Constant"),
-            },
-            -- stylua: ignore
-            {
-              function() return "  " .. require("dap").status() end,
-              cond = function () return package.loaded["dap"] and require("dap").status() ~= "" end,
-              -- color = Util.ui.fg("Debug"),
-            },
-          {
-            require('lazy.status').updates,
-            cond = require('lazy.status').has_updates,
-            -- color = Util.ui.fg 'Special',
-          },
+        lualine_b = {
+          { 'b:gitsigns_head', icon = { '' } },
           {
             'diff',
-            symbols = {
-              -- TODO: same here for the icon problem
-
-              -- added = icons.git.added,
-              -- modified = icons.git.modified,
-              -- removed = icons.git.removed,
-            },
-            source = function()
-              local gitsigns = vim.b.gitsigns_status_dict
-              if gitsigns then
-                return {
-                  added = gitsigns.added,
-                  modified = gitsigns.changed,
-                  removed = gitsigns.removed,
-                }
-              end
-            end,
+            source = diff_source,
+            -- fix for solarized osaka coloscheme, comment out if not in use
+            color = { bg = hsl(192, 100, 5) },
           },
+          {
+            'diagnostics',
+            sources = { 'nvim_diagnostic' },
+            -- fix for solarized osaka coloscheme, comment out if not in use
+            color = { bg = hsl(192, 100, 5) },
+          },
+        },
+        lualine_c = {
+          { 'filename', path = 1, symbols = { modified = '[]', readonly = ' ' } },
+          { 'lsp_progress', display_components = { 'lsp_client_name' } },
+        },
+        lualine_x = {
+          {
+            'macro-recording',
+            fmt = show_macro_recording,
+          },
+          { 'filetype', icon_only = true },
         },
         lualine_y = {
           { 'progress', separator = ' ', padding = { left = 1, right = 0 } },
-          { 'location', padding = { left = 0, right = 1 } },
+          { current_working_dir },
         },
-        lualine_z = {
-          function()
-            return ' ' .. os.date '%R'
-          end,
-        },
+        lualine_z = { { 'location' } },
+      },
+      inactive_sections = {
+        lualine_a = {},
+        lualine_b = {},
+        lualine_c = { { 'filename', path = 1, symbols = { modified = '[]', readonly = ' ' } } },
+        lualine_x = { 'location' },
+        lualine_y = {},
+        lualine_z = {},
       },
       extensions = { 'neo-tree', 'lazy' },
     }

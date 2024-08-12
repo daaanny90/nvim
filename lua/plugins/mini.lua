@@ -102,4 +102,23 @@ return { -- Collection of various small independent plugins/modules
       })
     end,
   },
+
+  {
+    'echasnovski/mini.animate',
+    version = '*',
+    opts = {
+      cursor = {
+        enable = false,
+      },
+      open = {
+        enable = false,
+      },
+      close = {
+        enable = false,
+      },
+      resize = {
+        enable = false,
+      },
+    },
+  },
 }
