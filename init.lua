@@ -12,7 +12,13 @@ require 'autocmd'
 
 -- [[ Configure and install plugins ]]
 require('lazy').setup {
-  { import = 'plugins' },
+  dev = {
+    path = '~/.config/nvim/lua/plugins/my-plugins/',
+  },
+  spec = {
+    { import = 'plugins' },
+  },
+  -- dev = '~/.config/nvim/lua/plugins/my-plugins',
 }
 
 -- The line beneath this is called `modeline`. See `:help modeline`
