@@ -1,34 +1,33 @@
 local M = {}
 
--- Funzione per formattare e aggiungere highlights per il grassetto e blocchi di codice
 local function format_diagnostic(diagnostics)
   local formatted_lines = {}
 
-  -- Funzione ausiliaria per identificare blocchi di codice
   local function highlight_code_blocks(message)
     if type(message) ~= 'string' then
       message = tostring(message)
     end
 
     local parts = {}
-    local pattern = "()([`'{].-[}`'])()"
+    local pattern = "([^']*)('[^']*')"
     local last_pos = 1
 
-    for start_pos, block, end_pos in message:gmatch(pattern) do
-      start_pos = tonumber(start_pos)
-      end_pos = tonumber(end_pos)
+    for normal_text, code_block in message:gmatch(pattern) do
+      if #normal_text > 0 then
+        table.insert(parts, { normal_text, 'Normal' })
+      end
 
-      if start_pos and last_pos < start_pos then
-        table.insert(parts, { message:sub(last_pos, start_pos - 1), 'Normal' })
+      if code_block then
+        -- Rimuovi i delimitatori e applica l'indentazione
+        local indented_code = '  ' .. code_block:gsub('\n', '\n  ')
+        table.insert(parts, { indented_code, 'CodeBlock' })
       end
-      if block then
-        table.insert(parts, { block, 'CodeBlock' })
-      end
-      if end_pos then
-        last_pos = end_pos
-      end
+
+      -- Aggiorna la posizione finale
+      last_pos = last_pos + #normal_text + #code_block
     end
 
+    -- Aggiungi eventuali testo rimanente alla fine
     if last_pos <= #message then
       table.insert(parts, { message:sub(last_pos), 'Normal' })
     end
@@ -36,52 +35,55 @@ local function format_diagnostic(diagnostics)
     return parts
   end
 
-  -- Loop attraverso tutti i diagnostics disponibili
   for _, diagnostic in ipairs(diagnostics) do
-    table.insert(formatted_lines, { '**Source**: ' .. diagnostic.source, 'Title' })
+    table.insert(formatted_lines, { diagnostic.source, 'Title' })
 
     if diagnostic.code then
-      table.insert(formatted_lines, { 'Error Code: `' .. diagnostic.code .. '`', 'CodeBlock' })
+      table.insert(formatted_lines, { 'Error Code: ' .. diagnostic.code, 'ErrorCode' })
     end
 
-    -- Processa e formatta il messaggio diagnostico
-    local diagnostic_message = diagnostic.message
-    local message_parts = highlight_code_blocks(diagnostic_message)
+    local message_parts = highlight_code_blocks(diagnostic.message)
+
+    print(vim.inspect(message_parts))
 
     for _, part in ipairs(message_parts) do
-      -- Se è un blocco di codice, spezzalo in una nuova riga
       if part[2] == 'CodeBlock' then
-        table.insert(formatted_lines, { '', 'Normal' }) -- Aggiungi una linea vuota prima del blocco
-        table.insert(formatted_lines, { part[1], 'CodeBlock' })
-        table.insert(formatted_lines, { '', 'Normal' }) -- Aggiungi una linea vuota dopo il blocco
+        -- table.insert(formatted_lines, { '', 'Normal' }) -- Linea vuota prima del codice
+        for _, line in ipairs(vim.split(part[1], '\n')) do
+          table.insert(formatted_lines, { line, 'CodeBlock' })
+        end
       else
-        table.insert(formatted_lines, { part[1], 'Normal' })
+        table.insert(formatted_lines, part)
       end
     end
 
     if diagnostic.range and diagnostic.range.start then
       local line = diagnostic.range.start.line + 1
       local character = diagnostic.range.start.character + 1
-      table.insert(formatted_lines, { string.format('**Location**: Line %d, Column %d', line, character), 'Normal' })
+      table.insert(formatted_lines, { string.format('**Location**: Line %d, Column %d', line, character), 'Location' })
     end
 
-    -- Aggiungi una linea vuota tra errori se ci sono più diagnostics
-    table.insert(formatted_lines, { '', 'Normal' })
+    table.insert(formatted_lines, { '', 'Normal' }) -- Separatore tra diagnostici
   end
 
   return formatted_lines
 end
 
--- Funzione per ridimensionare la finestra in base al contenuto
 local function calculate_window_size(formatted)
-  local width, height = 0, #formatted
+  local max_width = 0
+  local height = #formatted
+
   for _, line_info in ipairs(formatted) do
-    local line_length = #line_info[1]
-    if line_length > width then
-      width = line_length
+    local line_length = vim.fn.strdisplaywidth(line_info[1])
+    if line_length > max_width then
+      max_width = line_length
     end
   end
-  return math.min(width + 4, 80), math.min(height + 2, 20) -- Limita la dimensione massima della finestra
+  max_width = max_width + 4
+  height = height + 2
+
+  -- Limita le dimensioni della finestra
+  return math.min(max_width, 120), math.min(height, 30)
 end
 
 -- Funzione per chiudere la finestra fluttuante al movimento del cursore
@@ -109,8 +111,8 @@ function M.open_formatted_float(opts)
 
   local width, height = calculate_window_size(formatted)
 
-  -- Crea la finestra fluttuante
-  local opts_float = {
+  local buf = vim.api.nvim_create_buf(false, true)
+  local win = vim.api.nvim_open_win(buf, false, {
     relative = 'cursor',
     width = width,
     height = height,
@@ -118,36 +120,33 @@ function M.open_formatted_float(opts)
     col = 1,
     style = 'minimal',
     border = 'rounded',
-  }
+  })
 
-  -- Crea il buffer e setta la finestra
-  local buf = vim.api.nvim_create_buf(false, true)
-  local win = vim.api.nvim_open_win(buf, false, opts_float)
+  -- Iniziamo con una linea vuota per il margine superiore
+  vim.api.nvim_buf_set_lines(buf, 0, 1, false, { '' })
 
-  -- Aggiusta il contenuto del buffer per ogni linea
-  local line_count = 0
+  local current_line = 1
+
   for _, line_info in ipairs(formatted) do
-    local line_content = line_info[1]
-    local highlight_group = line_info[2]
-
-    -- Spezza il contenuto per linee separate se contiene newline
-    local lines = vim.split(line_content, '\n', true) -- true rimuove newline
+    local lines = vim.split(line_info[1], '\n')
 
     for _, line in ipairs(lines) do
-      vim.api.nvim_buf_set_lines(buf, line_count, line_count + 1, false, { line })
-      vim.api.nvim_buf_add_highlight(buf, -1, highlight_group, line_count, 0, -1)
-      line_count = line_count + 1
+      vim.api.nvim_buf_set_lines(buf, current_line - 1, current_line, false, { line })
+      vim.api.nvim_buf_add_highlight(buf, -1, line_info[2], current_line - 1, 0, -1)
+      current_line = current_line + 1
     end
   end
 
-  -- Chiudi la finestra quando il cursore si muove
   close_on_cursor_move(win)
 end
 
--- Configurazione per gli highlights
 function M.setup()
-  vim.cmd 'highlight Title guifg=Yellow guibg=NONE gui=bold'
-  vim.cmd 'highlight CodeBlock guifg=LightBlue guibg=NONE'
+  vim.cmd [[
+    highlight Title guifg=#FFD700 guibg=NONE gui=bold
+    highlight ErrorCode guifg=#FF6347 guibg=NONE gui=italic
+    highlight CodeBlock guifg=#87CEFA guibg=#1C1C1C gui=NONE
+    highlight Location guifg=#98FB98 guibg=NONE gui=NONE
+  ]]
   print 'ts-error-formatter setup complete'
 end
 
