@@ -40,3 +40,15 @@ vim.opt.spelllang = { 'en_us', 'de_de' }
 
 -- do not show the tilde for blank lines
 vim.opt.fillchars = 'eob: '
+
+-- customize gitsigns
+vim.diagnostic.config {
+  signs = {
+    text = {
+      [vim.diagnostic.severity.ERROR] = '❌',
+      [vim.diagnostic.severity.WARN] = '⚠️',
+      [vim.diagnostic.severity.INFO] = 'ℹ️',
+      [vim.diagnostic.severity.HINT] = '💡',
+    },
+  },
+}
