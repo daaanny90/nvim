@@ -41,6 +41,7 @@ return {
             key = 'd',
           },
         },
+        project = { action = 'Telescope oldfiles cwd=' },
       },
     }
   end,

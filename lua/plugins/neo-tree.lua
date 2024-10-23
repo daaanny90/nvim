@@ -123,14 +123,15 @@ return {
     update_focused_file = {
       enable = true,
     },
-    event_handlers = {
-      {
-        event = 'file_opened',
-        handler = function()
-          require('neo-tree.command').execute { action = 'close' }
-        end,
-      },
-    },
+    -- auto close when the file is open. Now I want to keep it open again, maybe I will change my mind and go back to the auto close, that's why the code is only commented out.
+    -- event_handlers = {
+    --   {
+    --     event = 'file_opened',
+    --     handler = function()
+    --       require('neo-tree.command').execute { action = 'close' }
+    --     end,
+    --   },
+    -- },
     config = function(_, opts)
       require('neo-tree').setup(opts)
       vim.api.nvim_create_autocmd('TermClose', {

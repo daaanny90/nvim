@@ -1,6 +1,6 @@
 -- fix for solarized osaka coloscheme, comment out if not in use
-local hslutil = require 'solarized-osaka.hsl'
-local hsl = hslutil.hslToHex
+-- local hslutil = require 'solarized-osaka.hsl'
+-- local hsl = hslutil.hslToHex
 
 local function diff_source()
   local gitsigns = vim.b.gitsigns_status_dict
@@ -59,13 +59,13 @@ return {
             'diff',
             source = diff_source,
             -- fix for solarized osaka coloscheme, comment out if not in use
-            color = { bg = hsl(192, 100, 5) },
+            -- color = { bg = hsl(192, 100, 5) },
           },
           {
             'diagnostics',
             sources = { 'nvim_diagnostic' },
             -- fix for solarized osaka coloscheme, comment out if not in use
-            color = { bg = hsl(192, 100, 5) },
+            -- color = { bg = hsl(192, 100, 5) },
           },
         },
         lualine_c = {
@@ -93,7 +93,7 @@ return {
         lualine_y = {},
         lualine_z = {},
       },
-      extensions = { 'neo-tree', 'lazy' },
+      extensions = { 'neo-tree', 'lazy', 'nvim-dap-ui' },
     }
   end,
 }

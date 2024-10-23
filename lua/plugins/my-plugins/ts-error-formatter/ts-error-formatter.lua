@@ -102,6 +102,8 @@ function M.open_formatted_float(opts)
   local bufnr = opts.bufnr or vim.api.nvim_get_current_buf()
   local diagnostics = vim.diagnostic.get(bufnr)
 
+  print(vim.inspect(diagnostics))
+
   local formatted = format_diagnostic(diagnostics)
 
   if not formatted or #formatted == 0 then

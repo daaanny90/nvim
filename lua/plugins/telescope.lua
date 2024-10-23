@@ -1,3 +1,22 @@
+local function filenameFirst(_, path)
+  local tail = vim.fs.basename(path)
+  local parent = vim.fs.dirname(path)
+  if parent == '.' then
+    return tail
+  end
+  return string.format('%s\t\t%s', tail, parent)
+end
+
+vim.api.nvim_create_autocmd('FileType', {
+  pattern = 'TelescopeResults',
+  callback = function(ctx)
+    vim.api.nvim_buf_call(ctx.buf, function()
+      vim.fn.matchadd('TelescopeParent', '\t\t.*$')
+      vim.api.nvim_set_hl(0, 'TelescopeParent', { link = 'Comment' })
+    end)
+  end,
+})
+
 return { -- Fuzzy Finder (files, lsp, etc)
   'nvim-telescope/telescope.nvim',
   event = 'VimEnter',
@@ -23,51 +42,42 @@ return { -- Fuzzy Finder (files, lsp, etc)
     { 'nvim-tree/nvim-web-devicons', enabled = vim.g.have_nerd_font },
   },
   config = function()
-    -- Telescope is a fuzzy finder that comes with a lot of different things that
-    -- it can fuzzy find! It's more than just a "file finder", it can search
-    -- many different aspects of Neovim, your workspace, LSP, and more!
-    --
-    -- The easiest way to use Telescope, is to start by doing something like:
-    --  :Telescope help_tags
-    --
-    -- After running this command, a window will open up and you're able to
-    -- type in the prompt window. You'll see a list of `help_tags` options and
-    -- a corresponding preview of the help.
-    --
-    -- Two important keymaps to use while in Telescope are:
-    --  - Insert mode: <c-/>
-    --  - Normal mode: ?
-    --
-    -- This opens a window that shows you all of the keymaps for the current
-    -- Telescope picker. This is really useful to discover what Telescope can
-    -- do as well as how to actually do it!
-
-    -- [[ Configure Telescope ]]
-    -- See `:help telescope` and `:help telescope.setup()`
     require('telescope').setup {
-      -- You can put your default mappings / updates / etc. in here
-      --  All the info you're looking for is in `:help telescope.setup()`
-      --
-      -- defaults = {
-      --   mappings = {
-      --     i = { ['<c-enter>'] = 'to_fuzzy_refine' },
-      --   },
-      -- },
-      -- pickers = {}
-      defailts = {
+      defaults = {
         file_ignore_patterns = {
           'node_modules',
           '.git',
         },
+        -- path_display = { 'smart' },
+        -- layout_strategy = 'vertical',
+
+        -- prompt_prefix = ' ',
+        -- selection_caret = ' ',
+        -- path_display = { filenameFirst },
+        -- dynamic_preview_title = true,
+        -- winblend = 10,
+        -- sorting_strategy = 'ascending',
+        -- layout_strategy = 'vertical',
+        -- layout_config = {
+        --   prompt_position = 'bottom',
+        --   height = 0.95,
+        -- },
       },
       pickers = {
         oldfiles = {
           cwd_only = true,
+          path_display = { filenameFirst },
         },
+        git_status = { path_display = filenameFirst },
+        find_files = { path_display = filenameFirst },
+        lsp_references = { path_display = filenameFirst },
       },
       extensions = {
         ['ui-select'] = {
           require('telescope.themes').get_dropdown(),
+        },
+        projects = {
+          projects = {},
         },
       },
     }
@@ -75,6 +85,7 @@ return { -- Fuzzy Finder (files, lsp, etc)
     -- Enable Telescope extensions if they are installed
     pcall(require('telescope').load_extension, 'fzf')
     pcall(require('telescope').load_extension, 'ui-select')
+    pcall(require('telescope').load_extension, 'projects')
 
     -- See `:help telescope.builtin`
     local builtin = require 'telescope.builtin'
