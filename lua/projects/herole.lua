@@ -17,8 +17,15 @@ require('lspconfig').volar.setup {
   },
 }
 
+-- LSP - ESLINT Format on save
+vim.api.nvim_create_autocmd('BufWritePre', {
+  callback = function()
+    vim.lsp.buf.format()
+  end,
+})
+
 -- LSP - TSSERVER
-require('lspconfig').tsserver.setup {
+require('lspconfig').ts_ls.setup {
   init_options = {
     plugins = {
       {
