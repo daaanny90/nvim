@@ -8,8 +8,7 @@ vim.keymap.set('n', ']d', vim.diagnostic.goto_next, { desc = 'Go to next [D]iagn
 local ts_error_formatter = require 'plugins.my-plugins.ts-error-formatter.ts-error-formatter'
 vim.keymap.set('n', '<leader>cd', function()
   ts_error_formatter.open_formatted_float()
-end
-, { desc = 'Show [D]iagnostic error messages' })
+end, { desc = 'Show [D]iagnostic error messages' })
 vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist, { desc = 'Open diagnostic [Q]uickfix list' })
 
 -- TIP: Disable arrow keys in normal mode
@@ -49,4 +48,6 @@ vim.keymap.set('n', '<leader>m', '<cmd>Mason<cr>', { desc = 'Open Mason' })
 local opts = { noremap = true, silent = true, desc = 'Generate function [D]ocumentation' }
 vim.api.nvim_set_keymap('n', '<Leader>cD', ":lua require('neogen').generate()<CR>", opts)
 
--- http client kulala keybindings
+-- move between open buffers
+vim.keymap.set({ 'n', 'i' }, '<S-l>', '<cmd>bnext<cr>', { desc = 'Next buffer' })
+vim.keymap.set({ 'n', 'i' }, '<S-h>', '<cmd>bprev<cr>', { desc = 'Previous buffer' })
