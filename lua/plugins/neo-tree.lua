@@ -95,10 +95,14 @@ return {
         expander_expanded = '',
         expander_highlight = 'NeoTreeExpander',
       },
+      modified = {
+        symbol = '✏️',
+        highlight = 'NeoTreeModified',
+      },
       git_status = {
         symbols = {
-          unstaged = '󰄱',
-          staged = '󰱒',
+          unstaged = '🤌',
+          staged = '✅',
         },
       },
     },
@@ -114,10 +118,12 @@ return {
         hide_gitignored = true,
         hide_by_name = {
           -- '.git',
-          -- '.DS_Store',
+          '.DS_Store',
           -- 'thumbs.db',
         },
-        never_show = {},
+        never_show = {
+          '.DS_Store',
+        },
       },
     },
     update_focused_file = {
