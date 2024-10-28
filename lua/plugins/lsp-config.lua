@@ -106,65 +106,6 @@ return { -- LSP Configuration & Plugins
     local capabilities = vim.lsp.protocol.make_client_capabilities()
     capabilities = vim.tbl_deep_extend('force', capabilities, require('cmp_nvim_lsp').default_capabilities())
 
-    -- Enable the following language servers
-    --
-    --  Available keys are:
-    --  - cmd (table): Override the default command used to start the server
-    --  - filetypes (table): Override the default list of associated filetypes for the server
-    --  - capabilities (table): Override fields in capabilities. Can be used to disable certain LSP features.
-    --  - settings (table): Override the default settings passed when initializing the server.
-    --        For example, to see the options for `lua_ls`, you could go to: https://luals.github.io/wiki/settings/
-    local servers = {
-      --   lua_ls = {
-      --     settings = {
-      --       Lua = {
-      --         completion = {
-      --           callSnippet = 'Replace',
-      --         },
-      --       },
-      --     },
-      --   },
-      --   yamlls = {},
-      --   eslint = {},
-      --   volar = {
-      --     init_options = {
-      --       vue = {
-      --         hybridMode = true,
-      --       },
-      --     },
-      --     filetypes = {
-      --       'vue',
-      --     },
-      --     settings = {
-      --       Vue = {
-      --         completion = {
-      --           defaultTagNameCase = 'kebabCase',
-      --         },
-      --       },
-      --     },
-      --   },
-      --   tsserver = {
-      --     init_options = {
-      --       plugins = {
-      --         {
-      --           name = '@vue/typescript-plugin',
-      --           location = '/Users/dasp/.nvm/versions/node/v18.19.0/lib/node_modules/@vue/typescript-plugin',
-      --           languages = {
-      --             'javascript',
-      --             'typescript',
-      --             'vue',
-      --           },
-      --         },
-      --       },
-      --     },
-      --     filetypes = {
-      --       'typescript',
-      --       'javascript',
-      --       'vue',
-      --     },
-      --   },
-    }
-
     -- Ensure the servers and tools above are installed
     --  To check the current status of installed tools and/or manually install
     --  other tools, you can run
@@ -175,7 +116,7 @@ return { -- LSP Configuration & Plugins
 
     -- You can add other tools here that you want Mason to install
     -- for you, so that they are available from within Neovim.
-    local ensure_installed = vim.tbl_keys(servers or {})
+    local ensure_installed = {}
     vim.list_extend(ensure_installed, {
       'stylua', -- Used to format Lua code
     })
@@ -184,7 +125,7 @@ return { -- LSP Configuration & Plugins
     require('mason-lspconfig').setup {
       handlers = {
         function(server_name)
-          local server = servers[server_name] or {}
+          local server = {}
           -- This handles overriding only values explicitly passed
           -- by the server configuration above. Useful when disabling
           -- certain features of an LSP (for example, turning off formatting for tsserver)
@@ -194,4 +135,27 @@ return { -- LSP Configuration & Plugins
       },
     }
   end,
+  opts = {
+    diagnostics = {
+      underline = true,
+      update_in_insert = false,
+      virtual_text = {
+        spacing = 4,
+        source = 'if_many',
+        prefix = '●',
+        -- this will set set the prefix to a function that returns the diagnostics icon based on the severity
+        -- this only works on a recent 0.10.0 build. Will be set to "●" when not supported
+        -- prefix = "icons",
+      },
+      severity_sort = true,
+      signs = {
+        text = {
+          [vim.diagnostic.severity.ERROR] = '❌',
+          [vim.diagnostic.severity.WARN] = '⚠️',
+          [vim.diagnostic.severity.HINT] = '💡',
+          [vim.diagnostic.severity.INFO] = 'ℹ️',
+        },
+      },
+    },
+  },
 }
