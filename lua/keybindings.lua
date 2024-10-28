@@ -49,5 +49,5 @@ local opts = { noremap = true, silent = true, desc = 'Generate function [D]ocume
 vim.api.nvim_set_keymap('n', '<Leader>cD', ":lua require('neogen').generate()<CR>", opts)
 
 -- move between open buffers
-vim.keymap.set({ 'n', 'i' }, '<S-l>', '<cmd>bnext<cr>', { desc = 'Next buffer' })
-vim.keymap.set({ 'n', 'i' }, '<S-h>', '<cmd>bprev<cr>', { desc = 'Previous buffer' })
+vim.keymap.set('n', '<S-l>', '<cmd>bnext<cr>', { desc = 'Next buffer' })
+vim.keymap.set('n', '<S-h>', '<cmd>bprev<cr>', { desc = 'Previous buffer' })
