@@ -44,7 +44,7 @@ local function format_diagnostic(diagnostics)
 
     local message_parts = highlight_code_blocks(diagnostic.message)
 
-    print(vim.inspect(message_parts))
+    print 'hello 1'
 
     for _, part in ipairs(message_parts) do
       if part[2] == 'CodeBlock' then
@@ -102,7 +102,7 @@ function M.open_formatted_float(opts)
   local bufnr = opts.bufnr or vim.api.nvim_get_current_buf()
   local diagnostics = vim.diagnostic.get(bufnr)
 
-  print(vim.inspect(diagnostics))
+  print 'hello'
 
   local formatted = format_diagnostic(diagnostics)
 
