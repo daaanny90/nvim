@@ -18,10 +18,10 @@ return { -- You can easily change to a different colorscheme.
   -- },
 
   -- {
-  --   'Mofiqul/dracula.nvim',
+  --   "Mofiqul/dracula.nvim",
   --   priority = 1000,
   --   init = function()
-  --     vim.cmd.colorscheme 'dracula'
+  --     vim.cmd.colorscheme("dracula")
   --   end,
   -- },
 
@@ -132,13 +132,18 @@ return { -- You can easily change to a different colorscheme.
   --   end,
   -- },
 
-  -- {
-  --   'rose-pine/neovim',
-  --   name = 'rose-pine',
-  --   init = function()
-  --     vim.cmd.colorscheme 'rose-pine'
-  --   end,
-  -- },
+  {
+    "rose-pine/neovim",
+    name = "rose-pine",
+    init = function()
+      require("rose-pine").setup({
+        styles = {
+          transparency = true,
+        },
+      })
+      vim.cmd.colorscheme("rose-pine-moon")
+    end,
+  },
 
   -- {
   --   'slugbyte/lackluster.nvim',
@@ -158,29 +163,27 @@ return { -- You can easily change to a different colorscheme.
   --   end,
   -- },
 
-  {
-    'dasp/vim-colors-xcode',
-    dev = true,
-    config = function()
-      vim.g.xcode_green_comments = 1
-      vim.cmd.colorscheme 'xcode'
-    end,
-  },
+  -- {
+  --   'arzg/vim-colors-xcode',
+  --   config = function()
+  --     vim.cmd.colorscheme 'xcodedarkhc'
+  --   end,
+  -- },
 
   -- {
-  --   'catppuccin/nvim',
+  --   "catppuccin/nvim",
   --   lazy = false, -- make sure we load this during startup if it is your main colorscheme
   --   priority = 1000, -- make sure to load this before all the other start plugins
   --   config = function()
-  --     require('catppuccin').setup {
-  --       flavour = 'mocha',
+  --     require("catppuccin").setup({
+  --       flavour = "mocha",
   --       term_colors = true,
   --       transparent_background = false,
   --       styles = { -- Handles the styles of general hi groups (see `:h highlight-args`):
-  --         comments = { 'italic' }, -- Change the style of comments
-  --         conditionals = { 'italic' },
+  --         comments = { "italic" }, -- Change the style of comments
+  --         conditionals = { "italic" },
   --         loops = {},
-  --         functions = { 'bold' },
+  --         functions = { "bold" },
   --         keywords = {},
   --         strings = {},
   --         variables = {},
@@ -191,13 +194,13 @@ return { -- You can easily change to a different colorscheme.
   --         operators = {},
   --         -- miscs = {}, -- Uncomment to turn off hard-coded styles
   --       },
-  --       -- color_overrides = {
-  --       --   mocha = {
-  --       --     base = '#191919',
-  --       --     mantle = '#191919',
-  --       --     crust = '#191919',
-  --       --   },
-  --       -- },
+  --       color_overrides = {
+  --         mocha = {
+  --           base = "#191919",
+  --           mantle = "#191919",
+  --           crust = "#191919",
+  --         },
+  --       },
   --       integrations = {
   --         noice = true,
   --         notify = true,
@@ -205,25 +208,31 @@ return { -- You can easily change to a different colorscheme.
   --         treesitter = true,
   --         treesitter_context = true,
   --       },
-  --     }
+  --     })
   --     -- load the colorscheme here
-  --     vim.cmd [[colorscheme catppuccin]]
-  --     vim.o.background = 'dark'
+  --     vim.cmd([[colorscheme catppuccin]])
+  --     vim.o.background = "dark"
   --   end,
   -- },
 
   -- {
-  --   'craftzdog/solarized-osaka.nvim',
+  --   "craftzdog/solarized-osaka.nvim",
   --   lazy = false,
   --   priority = 1000,
   --   opts = {},
   --   config = function()
-  --     require('solarized-osaka').setup {
+  --     require("solarized-osaka").setup({
+  --       styles = {
+  --         -- Style to be applied to different syntax groups
+  --         -- Value is any valid attr-list value for `:help nvim_set_hl`
+  --         comments = { italic = true },
+  --         keywords = { italic = true },
+  --       },
   --       on_highlights = function(highlights, colors)
   --         highlights.Visual = { bg = colors.base01, reverse = false }
   --       end,
-  --     }
-  --     vim.cmd.colorscheme 'solarized-osaka'
+  --     })
+  --     vim.cmd.colorscheme("solarized-osaka")
   --   end,
   -- },
 }
