@@ -12,35 +12,28 @@ return { -- Autoformat
     },
   },
   opts = {
-    notify_on_error = false,
-    -- format_on_save = function(bufnr)
-    --   -- Disable "format_on_save lsp_fallback" for languages that don't
-    --   -- have a well standardized coding style. You can add additional
-    --   -- languages here or re-enable it for the disabled ones.
-    --   local disable_filetypes = { c = true, cpp = true }
-    --   return {
-    --     timeout_ms = 500,
-    --     lsp_fallback = not disable_filetypes[vim.bo[bufnr].filetype],
-    --   }
-    -- end,
+    notify_on_error = true,
+    notify_no_formatters = true,
+    log_level = vim.log.levels.DEBUG,
     formatters_by_ft = {
       lua = { 'stylua' },
-      -- Conform can also run multiple formatters sequentially
-      -- python = { "isort", "black" },
-      --
-      -- You can use a sub-list to tell conform to run *until* a formatter
-      -- is found.
       typescript = { 'eslint_d' },
-      -- javascript = { 'eslint_d', format_on_save = true },
-      scss = { 'prettier' },
+      javascript = { 'eslint_d' },
+      javascriptreact = { 'prettier', 'eslint_d' },
+      typescriptreact = { 'prettier', 'eslint_d' },
       vue = { 'eslint_d' },
+      scss = { 'prettier' },
+      css = { 'prettier' },
+      html = { 'prettier' },
+      json = { 'prettier' },
       astro = { 'prettier' },
     },
-    format_on_save = {
-      lsp_fallback = false,
-      async = false,
-      timeout_ms = 500,
-    },
+    format_on_save = function(bufnr)
+      return {
+        timeout_ms = 3000,
+        lsp_fallback = false,
+      }
+    end,
     formatters = {
       prettier = {
         prepend_args = { '--single-quote' },
