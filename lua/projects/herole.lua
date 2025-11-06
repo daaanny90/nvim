@@ -1,5 +1,5 @@
--- LSP - VOLAR
-require("lspconfig").volar.setup({
+-- LSP - VUE_LS
+vim.lsp.config["vue_ls"] = {
   init_options = {
     vue = {
       hybridMode = false,
@@ -8,19 +8,14 @@ require("lspconfig").volar.setup({
   filetypes = {
     "vue",
   },
-  settings = {
-    Vue = {
-      completion = {
-        defaultTagNameCase = "kebabCase",
-      },
-    },
-  },
-})
+}
 
 -- LSP - TSSERVER
-require("lspconfig").ts_ls.setup({
+vim.lsp.config["ts_ls"] = {
   capabilities = require("cmp_nvim_lsp").default_capabilities(), -- Importa le capabilities di nvim-cmp
-  root_dir = require("lspconfig.util").root_pattern("tsconfig.json", "package.json", ".git"),
+  root_dir = function(filename)
+    return vim.fs.root(filename, { "tsconfig.json", "package.json", ".git" })
+  end,
   init_options = {
     plugins = {
       {
@@ -39,7 +34,10 @@ require("lspconfig").ts_ls.setup({
     "javascript",
     "vue",
   },
-})
+}
+
+-- LSP - ACTIVATE
+vim.lsp.enable("vue_ls", "ts_ls")
 
 -- EslintFixAll on save through eslint_d and conform stopped working for now reason
 -- this fixes the problem. Configuration in conform is still on autosave = true

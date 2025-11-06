@@ -55,3 +55,6 @@ vim.diagnostic.config({
 
 -- keep cursor always in the middle of the screen except top and bottom
 -- vim.opt.scrolloff = 999
+
+-- views can only be fully collapsed with the global statusline
+vim.opt.laststatus = 3

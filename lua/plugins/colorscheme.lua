@@ -5,17 +5,45 @@ return { -- You can easily change to a different colorscheme.
   -- If you want to see what colorschemes are already installed, you can use `:Telescope colorscheme`.
 
   -- {
-  --   'folke/tokyonight.nvim',
+  --   "folke/tokyonight.nvim",
   --   priority = 1000, -- Make sure to load this before all the other start plugins.
   --   init = function()
-  --     vim.cmd.colorscheme 'tokyonight-night'
-  --     -- vim.cmd.colorscheme 'tokyonight-storm'
-  --     -- vim.cmd.colorscheme 'tokyonight-moon'
-  --     -- vim.cmd.colorscheme 'tokyonight-day'
+  --     vim.cmd.colorscheme("tokyonight-night")
+  --     -- vim.cmd.colorscheme("tokyonight-storm")
+  --     -- vim.cmd.colorscheme("tokyonight-moon")
+  --     -- vim.cmd.colorscheme("tokyonight-day")
   --
-  --     vim.cmd.hi 'Comment gui=none'
+  --     vim.cmd.hi("Comment gui=none")
   --   end,
   -- },
+
+  -- {
+  --   "bluz71/vim-moonfly-colors",
+  --   name = "moonfly",
+  --   lazy = false,
+  --   priority = 1000,
+  --   init = function()
+  --     vim.cmd.colorscheme("moonfly")
+  --   end,
+  -- },
+
+  {
+    "EdenEast/nightfox.nvim",
+    lazy = false,
+    priority = 1000,
+    config = function()
+      require("nightfox").setup({
+        -- palettes = {
+        --   carbonfox = {
+        --     bg1 = "#0a0a0a",
+        --   },
+        -- },
+      })
+    end,
+    init = function()
+      vim.cmd.colorscheme("carbonfox")
+    end,
+  },
 
   -- {
   --   "Mofiqul/dracula.nvim",
@@ -26,21 +54,21 @@ return { -- You can easily change to a different colorscheme.
   -- },
 
   -- {
-  --   'bluz71/vim-moonfly-colors',
-  --   name = 'moonfly',
+  --   "bluz71/vim-moonfly-colors",
+  --   name = "moonfly",
   --   lazy = false,
   --   priority = 1000,
   --   config = function()
-  --     vim.cmd.colorscheme 'moonfly'
+  --     vim.cmd.colorscheme("moonfly")
   --   end,
   -- },
 
   -- {
-  --   'Mofiqul/vscode.nvim',
+  --   "Mofiqul/vscode.nvim",
   --   priority = 1000,
   --   config = function()
-  --     local c = require('vscode.colors').get_colors()
-  --     require('vscode').setup {
+  --     local c = require("vscode.colors").get_colors()
+  --     require("vscode").setup({
   --       -- Alternatively set style in setup
   --       -- style = 'light'
   --
@@ -67,30 +95,30 @@ return { -- You can easily change to a different colorscheme.
   --         -- use colors from this colorscheme by requiring vscode.colors!
   --         Cursor = { fg = c.vscDarkBlue, bg = c.vscLightGreen, bold = true },
   --       },
-  --     }
+  --     })
   --   end,
   --   init = function()
-  --     vim.cmd.colorscheme 'vscode'
+  --     vim.cmd.colorscheme("vscode")
   --   end,
   -- },
 
   -- {
-  --   'sainnhe/sonokai',
+  --   "sainnhe/sonokai",
   --   lazy = false,
   --   priority = 1000,
   --   config = function()
   --     -- Optionally configure and load the colorscheme
   --     -- directly inside the plugin declaration.
   --     vim.g.sonokai_enable_italic = true
-  --     vim.cmd.colorscheme 'sonokai'
+  --     vim.cmd.colorscheme("sonokai")
   --   end,
   -- },
 
   -- {
-  --   'olimorris/onedarkpro.nvim',
+  --   "olimorris/onedarkpro.nvim",
   --   priority = 1000, -- Ensure it loads first
   --   config = function()
-  --     vim.cmd 'colorscheme onedark'
+  --     vim.cmd("colorscheme onedark")
   --   end,
   -- },
 
@@ -104,46 +132,61 @@ return { -- You can easily change to a different colorscheme.
   -- },
 
   -- {
-  --   'shaunsingh/nord.nvim',
+  --   "shaunsingh/nord.nvim",
   --   priority = 1000,
   --   init = function()
-  --     vim.cmd.colorscheme 'nord'
+  --     vim.cmd.colorscheme("nord")
   --   end,
   -- },
-
+  --
   -- {
-  --   'projekt0n/github-nvim-theme',
+  --   "projekt0n/github-nvim-theme",
   --   lazy = false, -- make sure we load this during startup if it is your main colorscheme
   --   priority = 1000, -- make sure to load this before all the other start plugins
   --   config = function()
-  --     require('github-theme').setup {
-  --       -- ...
-  --     }
+  --     require("github-theme").setup({
+  --       options = {
+  --         darken = {
+  --           sidebars = {
+  --             enable = false,
+  --           },
+  --         },
+  --       },
+  --     })
   --
-  --     vim.cmd 'colorscheme github_dark_dimmed'
+  --     vim.cmd("colorscheme github_dark_default")
   --   end,
   -- },
 
   -- {
-  --   'danwlker/primeppuccin',
+  --   "nyoom-engineering/oxocarbon.nvim",
   --   priority = 1000,
+  --   config = function()
+  --     require("oxocarbon").setup({
+  --       palettes = {
+  --         oxocarbon = {
+  --           bg1 = "#ffffff",
+  --         },
+  --       },
+  --     })
+  --   end,
   --   init = function()
-  --     vim.cmd.colorscheme 'catppuccin'
+  --     vim.opt.background = "dark" -- set this to dark or light
+  --     vim.cmd("colorscheme oxocarbon")
   --   end,
   -- },
-
-  {
-    "rose-pine/neovim",
-    name = "rose-pine",
-    init = function()
-      require("rose-pine").setup({
-        styles = {
-          transparency = true,
-        },
-      })
-      vim.cmd.colorscheme("rose-pine-moon")
-    end,
-  },
+  -- {
+  --   "rose-pine/neovim",
+  --   name = "rose-pine",
+  --   init = function()
+  --     require("rose-pine").setup({
+  --       styles = {
+  --         transparency = true,
+  --       },
+  --     })
+  --     vim.cmd.colorscheme("rose-pine-moon")
+  --   end,
+  -- },
 
   -- {
   --   'slugbyte/lackluster.nvim',
@@ -157,16 +200,24 @@ return { -- You can easily change to a different colorscheme.
   -- },
 
   -- {
-  --   'bettervim/yugen.nvim',
+  --   "bettervim/yugen.nvim",
   --   config = function()
-  --     vim.cmd.colorscheme 'yugen'
+  --     vim.cmd.colorscheme("yugen")
   --   end,
   -- },
 
   -- {
-  --   'arzg/vim-colors-xcode',
+  --   "daaanny90/vim-colors-xcode",
   --   config = function()
-  --     vim.cmd.colorscheme 'xcodedarkhc'
+  --     vim.g.xcodedarkhc_green_comments = 1
+  --     vim.cmd.colorscheme("xcodedarkhc")
+  --   end,
+  -- },
+
+  -- {
+  --   "wuelnerdotexe/vim-enfocado",
+  --   config = function()
+  --     vim.cmd.colorscheme("enfocado")
   --   end,
   -- },
 
@@ -179,28 +230,26 @@ return { -- You can easily change to a different colorscheme.
   --       flavour = "mocha",
   --       term_colors = true,
   --       transparent_background = false,
-  --       styles = { -- Handles the styles of general hi groups (see `:h highlight-args`):
-  --         comments = { "italic" }, -- Change the style of comments
-  --         conditionals = { "italic" },
-  --         loops = {},
-  --         functions = { "bold" },
-  --         keywords = {},
-  --         strings = {},
-  --         variables = {},
-  --         numbers = {},
-  --         booleans = {},
-  --         properties = {},
-  --         types = {},
-  --         operators = {},
-  --         -- miscs = {}, -- Uncomment to turn off hard-coded styles
-  --       },
-  --       color_overrides = {
-  --         mocha = {
-  --           base = "#191919",
-  --           mantle = "#191919",
-  --           crust = "#191919",
-  --         },
-  --       },
+  --       conditionals = { "italic" },
+  --       loops = {},
+  --       functions = { "bold" },
+  --       keywords = {},
+  --       strings = {},
+  --       variables = {},
+  --       numbers = {},
+  --       booleans = {},
+  --       properties = {},
+  --       types = {},
+  --       operators = {},
+  --       -- miscs = {}, -- Uncomment to turn off hard-coded styles
+  --       -- },
+  --       -- color_overrides = {
+  --       --   mocha = {
+  --       --     base = "#0a0a0a",
+  --       --     mantle = "#191919",
+  --       --     crust = "#191919",
+  --       --   },
+  --       -- },
   --       integrations = {
   --         noice = true,
   --         notify = true,
@@ -214,7 +263,7 @@ return { -- You can easily change to a different colorscheme.
   --     vim.o.background = "dark"
   --   end,
   -- },
-
+  --
   -- {
   --   "craftzdog/solarized-osaka.nvim",
   --   lazy = false,
