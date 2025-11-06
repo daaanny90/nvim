@@ -27,23 +27,23 @@ return { -- You can easily change to a different colorscheme.
   --   end,
   -- },
 
-  {
-    "EdenEast/nightfox.nvim",
-    lazy = false,
-    priority = 1000,
-    config = function()
-      require("nightfox").setup({
-        -- palettes = {
-        --   carbonfox = {
-        --     bg1 = "#0a0a0a",
-        --   },
-        -- },
-      })
-    end,
-    init = function()
-      vim.cmd.colorscheme("carbonfox")
-    end,
-  },
+  -- {
+  --   "EdenEast/nightfox.nvim",
+  --   lazy = false,
+  --   priority = 1000,
+  --   config = function()
+  --     require("nightfox").setup({
+  --       -- palettes = {
+  --       --   carbonfox = {
+  --       --     bg1 = "#0a0a0a",
+  --       --   },
+  --       -- },
+  --     })
+  --   end,
+  --   init = function()
+  --     vim.cmd.colorscheme("carbonfox")
+  --   end,
+  -- },
 
   -- {
   --   "Mofiqul/dracula.nvim",
@@ -264,24 +264,24 @@ return { -- You can easily change to a different colorscheme.
   --   end,
   -- },
   --
-  -- {
-  --   "craftzdog/solarized-osaka.nvim",
-  --   lazy = false,
-  --   priority = 1000,
-  --   opts = {},
-  --   config = function()
-  --     require("solarized-osaka").setup({
-  --       styles = {
-  --         -- Style to be applied to different syntax groups
-  --         -- Value is any valid attr-list value for `:help nvim_set_hl`
-  --         comments = { italic = true },
-  --         keywords = { italic = true },
-  --       },
-  --       on_highlights = function(highlights, colors)
-  --         highlights.Visual = { bg = colors.base01, reverse = false }
-  --       end,
-  --     })
-  --     vim.cmd.colorscheme("solarized-osaka")
-  --   end,
-  -- },
+  {
+    "craftzdog/solarized-osaka.nvim",
+    lazy = false,
+    priority = 1000,
+    opts = {},
+    config = function()
+      require("solarized-osaka").setup({
+        styles = {
+          -- Style to be applied to different syntax groups
+          -- Value is any valid attr-list value for `:help nvim_set_hl`
+          comments = { italic = true },
+          keywords = { italic = true },
+        },
+        on_highlights = function(highlights, colors)
+          highlights.Visual = { bg = colors.base01, reverse = false }
+        end,
+      })
+      vim.cmd.colorscheme("solarized-osaka")
+    end,
+  },
 }

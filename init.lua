@@ -10,6 +10,9 @@ require 'keybindings'
 -- [[ Basic Autocommands ]]
 require 'autocmd'
 
+-- [[ Custom Commands ]]
+require 'commands'
+
 -- [[ Configure and install plugins ]]
 require('lazy').setup {
   dev = {
