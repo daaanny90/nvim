@@ -10,12 +10,16 @@ return {
     behaviour = {
       enable_cursor_planning_mode = true, -- enable cursor planning mode!
     },
-    claude = {
-      endpoint = "https://api.anthropic.com",
-      model = "claude-3-7-sonnet-20250219",
-      temperature = 0,
-      max_tokens = 4096,
-      disable_tools = true,
+    providers = {
+      claude = {
+        endpoint = "https://api.anthropic.com",
+        model = "claude-3-7-sonnet-20250219",
+        disable_tools = true,
+        extra_request_body = {
+          max_tokens = 4096,
+          temperature = 0,
+        },
+      },
     },
     windows = {
       position = "left",
