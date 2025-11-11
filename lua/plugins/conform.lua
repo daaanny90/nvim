@@ -1,14 +1,14 @@
 return { -- Autoformat
-  'stevearc/conform.nvim',
+  "stevearc/conform.nvim",
   lazy = false,
   keys = {
     {
-      '<leader>f',
+      "<leader>f",
       function()
-        require('conform').format { async = true, lsp_fallback = true }
+        require("conform").format({ async = true, lsp_fallback = true })
       end,
-      mode = '',
-      desc = '[F]ormat buffer',
+      mode = "",
+      desc = "[F]ormat buffer",
     },
   },
   opts = {
@@ -16,27 +16,27 @@ return { -- Autoformat
     notify_no_formatters = true,
     log_level = vim.log.levels.DEBUG,
     formatters_by_ft = {
-      lua = { 'stylua' },
-      typescript = { 'eslint_d' },
-      javascript = { 'eslint_d' },
-      javascriptreact = { 'prettier', 'eslint_d' },
-      typescriptreact = { 'prettier', 'eslint_d' },
-      vue = { 'eslint_d' },
-      scss = { 'prettier' },
-      css = { 'prettier' },
-      html = { 'prettier' },
-      json = { 'prettier' },
-      astro = { 'prettier' },
+      lua = { "stylua" },
+      typescript = { "eslint_d" },
+      javascript = { "eslint_d" },
+      javascriptreact = { "prettier", "eslint_d" },
+      typescriptreact = { "prettier", "eslint_d" },
+      vue = { "eslint_d" },
+      scss = { "prettier" },
+      css = { "prettier" },
+      html = { "prettier" },
+      json = { "prettier" },
+      astro = { "prettier" },
     },
     format_on_save = function(bufnr)
       return {
-        timeout_ms = 3000,
+        timeout_ms = 500,
         lsp_fallback = false,
       }
     end,
     formatters = {
       prettier = {
-        prepend_args = { '--single-quote' },
+        prepend_args = { "--single-quote" },
       },
     },
   },
