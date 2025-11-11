@@ -2,7 +2,7 @@
 local capabilities = require("cmp_nvim_lsp").default_capabilities()
 
 -- Configure VUE Language Server (vue_ls replaces deprecated volar)
-vim.lsp.config["vue_ls"] = {
+vim.lsp.config.vue_ls = {
   cmd = { "vue-language-server", "--stdio" },
   filetypes = { "vue" },
   root_markers = { "package.json", ".git" },
@@ -16,9 +16,10 @@ vim.lsp.config["vue_ls"] = {
     },
   },
 }
+vim.lsp.enable("vue_ls")
 
--- Configure TypeScript Language Server  
-vim.lsp.config["ts_ls"] = {
+-- Configure TypeScript Language Server
+vim.lsp.config.ts_ls = {
   cmd = { "typescript-language-server", "--stdio" },
   filetypes = { "typescript", "javascript", "javascriptreact", "typescriptreact", "vue" },
   root_markers = { "tsconfig.json", "package.json", ".git" },
@@ -33,29 +34,26 @@ vim.lsp.config["ts_ls"] = {
     },
   },
 }
+vim.lsp.enable("ts_ls")
 
 -- Configure ESLint LSP for linting
-vim.lsp.config["eslint"] = {
+vim.lsp.config.eslint = {
   cmd = { "vscode-eslint-language-server", "--stdio" },
   filetypes = { "javascript", "javascriptreact", "typescript", "typescriptreact", "vue" },
   root_markers = { ".eslintrc.js", ".eslintrc.json", ".eslintrc", "eslint.config.js", "package.json", ".git" },
   capabilities = capabilities,
-  on_attach = function(client, bufnr)
-    -- Auto-fix on save
-    vim.api.nvim_create_autocmd("BufWritePre", {
-      buffer = bufnr,
-      command = "EslintFixAll",
-    })
-  end,
   settings = {
     format = false, -- Use conform for formatting, not ESLint
     workingDirectory = { mode = "auto" },
+    -- this empty settings below are needed in order to make the linter work
+    rulesCustomizations = {},
+    problems = {},
+    nodePath = "",
+    experimental = {
+      useFlatConfig = false,
+    },
   },
 }
-
--- Enable LSP servers
-vim.lsp.enable("vue_ls")
-vim.lsp.enable("ts_ls")
 vim.lsp.enable("eslint")
 
 -- DAP - PHP XDEBUG
