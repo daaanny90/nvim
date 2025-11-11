@@ -1,11 +1,21 @@
-require("lspconfig").ts_ls.setup({})
-
+-- LSP Configuration using Neovim 11 native LSP
 local capabilities = require("cmp_nvim_lsp").default_capabilities()
 
-require("lspconfig").jsonls.setup({
+-- Configure TypeScript Language Server
+vim.lsp.config["ts_ls"] = {
+  cmd = { "typescript-language-server", "--stdio" },
+  filetypes = { "typescript", "javascript", "javascriptreact", "typescriptreact" },
+  root_markers = { "tsconfig.json", "package.json", ".git" },
   capabilities = capabilities,
+}
+
+-- Configure JSON Language Server
+vim.lsp.config["jsonls"] = {
+  cmd = { "vscode-json-language-server", "--stdio" },
   filetypes = { "json", "jsonc" },
-  settings = { -- nota: 'settings' invece di 'json' direttamente
+  root_markers = { "package.json", ".git" },
+  capabilities = capabilities,
+  settings = {
     json = {
       schemas = {
         {
@@ -20,7 +30,11 @@ require("lspconfig").jsonls.setup({
       validate = { enable = true },
     },
   },
-})
+}
+
+-- Enable LSP servers
+vim.lsp.enable("ts_ls")
+vim.lsp.enable("jsonls")
 
 -- EslintFixAll on save through eslint_d and conform stopped working for now reason
 -- this fixes the problem. Configuration in conform is still on autosave = true

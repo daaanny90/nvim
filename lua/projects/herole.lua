@@ -1,43 +1,42 @@
--- LSP - VUE_LS
+-- LSP Configuration using Neovim 11 native LSP
+local capabilities = require("cmp_nvim_lsp").default_capabilities()
+
+-- Configure VUE Language Server (vue_ls replaces deprecated volar)
 vim.lsp.config["vue_ls"] = {
+  cmd = { "vue-language-server", "--stdio" },
+  filetypes = { "vue" },
+  root_markers = { "package.json", ".git" },
+  capabilities = capabilities,
   init_options = {
     vue = {
       hybridMode = false,
     },
-  },
-  filetypes = {
-    "vue",
+    typescript = {
+      tsdk = "/Users/dasp/.nvm/versions/node/v18.19.0/lib/node_modules/typescript/lib",
+    },
   },
 }
 
--- LSP - TSSERVER
+-- Configure TypeScript Language Server  
 vim.lsp.config["ts_ls"] = {
-  capabilities = require("cmp_nvim_lsp").default_capabilities(), -- Importa le capabilities di nvim-cmp
-  root_dir = function(filename)
-    return vim.fs.root(filename, { "tsconfig.json", "package.json", ".git" })
-  end,
+  cmd = { "typescript-language-server", "--stdio" },
+  filetypes = { "typescript", "javascript", "javascriptreact", "typescriptreact", "vue" },
+  root_markers = { "tsconfig.json", "package.json", ".git" },
+  capabilities = capabilities,
   init_options = {
     plugins = {
       {
         name = "@vue/typescript-plugin",
         location = "/Users/dasp/.nvm/versions/node/v18.19.0/lib/node_modules/@vue/typescript-plugin",
-        languages = {
-          "javascript",
-          "typescript",
-          "vue",
-        },
+        languages = { "javascript", "typescript", "vue" },
       },
     },
   },
-  filetypes = {
-    "typescript",
-    "javascript",
-    "vue",
-  },
 }
 
--- LSP - ACTIVATE
-vim.lsp.enable("vue_ls", "ts_ls")
+-- Enable LSP servers
+vim.lsp.enable("vue_ls")
+vim.lsp.enable("ts_ls")
 
 -- DAP - PHP XDEBUG
 -- FIXME: not working at all. Server goes up but debug breakpoints don't work

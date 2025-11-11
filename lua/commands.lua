@@ -215,3 +215,91 @@ vim.api.nvim_create_user_command("PreCommitCheck", run_pre_commit_checks, {
 -- Optional: Add a keymap (you can change this to whatever you prefer)
 vim.keymap.set("n", "<leader>pc", run_pre_commit_checks, { desc = "[P]re-[C]ommit checks" })
 
+-- Weekly Report Generator
+local function generate_weekly_report()
+  -- Get current date/time
+  local now = os.time()
+  
+  -- Get current day of week (0=Sunday, 1=Monday, ..., 6=Saturday)
+  local current_weekday = tonumber(os.date("%w", now))
+  
+  -- Convert to Monday=1, ..., Friday=5, Saturday=6, Sunday=7
+  if current_weekday == 0 then
+    current_weekday = 7
+  end
+  
+  -- Calculate days until Friday (5)
+  local days_until_friday = 5 - current_weekday
+  
+  -- Get Friday's timestamp
+  local friday_timestamp = now + (days_until_friday * 24 * 60 * 60)
+  
+  -- Format date as DD.MM.YY
+  local friday_date = os.date("%d.%m.%y", friday_timestamp)
+  
+  -- Get week number for the subject line
+  local week_number = os.date("%V", friday_timestamp)
+  
+  -- Email subject line
+  local subject = string.format("Weekly Report - KW %s", week_number)
+  
+  -- Create the template
+  local template = {
+    subject,
+    "",
+    "",
+    "Wer:",
+    "",
+    "Danny Spina",
+    "",
+    "Wann:",
+    "",
+    friday_date,
+    "",
+    "Progress (Was habe ich letzte Woche erreicht?):",
+    "",
+    "",
+    "",
+    "Plans (Was nehme ich mir für die nächste Woche vor?):",
+    "",
+    "",
+    "",
+    "Problems (Was hindert mich gerade daran, meine Arbeit zu tun?):",
+    "",
+    "",
+    "",
+    "Personal (Welche Infos halte ich darüber hinaus persönlich noch als wichtig?):",
+    "",
+    "",
+    "",
+    "Legende: Bitte in Fett, wenn ich dich darauf ansprechen soll. Bitte in Kursiv, wenn es vertraulich ist. Bitte Fett-Kursiv, wenn beides zutrifft.",
+    "",
+  }
+  
+  -- Create a new buffer
+  local buf = vim.api.nvim_create_buf(true, false)
+  
+  -- Set buffer content
+  vim.api.nvim_buf_set_lines(buf, 0, -1, false, template)
+  
+  -- Switch to the new buffer
+  vim.api.nvim_set_current_buf(buf)
+  
+  -- Set buffer options
+  vim.bo[buf].filetype = "text"
+  vim.bo[buf].buftype = ""
+  
+  -- Set cursor to first empty line after "Progress"
+  vim.api.nvim_win_set_cursor(0, {13, 0})
+  
+  vim.notify(string.format("📝 Weekly report template created for %s (KW %s)", friday_date, week_number), vim.log.levels.INFO)
+end
+
+-- Create user command
+vim.api.nvim_create_user_command("Weekly", generate_weekly_report, {
+  desc = "Generate weekly report template with automatic date and subject",
+})
+
+-- Optional: Add a keymap
+vim.keymap.set("n", "<leader>wr", generate_weekly_report, { desc = "[W]eekly [R]eport" })
+
