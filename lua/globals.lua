@@ -1,5 +1,5 @@
-vim.g.mapleader = ' '
-vim.g.maplocalleader = ' '
+vim.g.mapleader = " "
+vim.g.maplocalleader = " "
 vim.g.have_nerd_font = true
 
 -- LSP
@@ -12,5 +12,4 @@ vim.lsp.config["lua_ls"] = {
     },
   },
 }
-
 vim.lsp.enable("lua_ls")
