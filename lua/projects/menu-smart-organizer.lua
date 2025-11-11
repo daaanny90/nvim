@@ -8,4 +8,17 @@ vim.lsp.config["ts_ls"] = {
   capabilities = capabilities,
 }
 
+-- Configure ESLint LSP for linting
+vim.lsp.config["eslint"] = {
+  cmd = { "vscode-eslint-language-server", "--stdio" },
+  filetypes = { "javascript", "javascriptreact", "typescript", "typescriptreact" },
+  root_markers = { ".eslintrc.js", ".eslintrc.json", ".eslintrc", "eslint.config.js", "package.json", ".git" },
+  capabilities = capabilities,
+  settings = {
+    format = false,
+    workingDirectory = { mode = "auto" },
+  },
+}
+
 vim.lsp.enable("ts_ls")
+vim.lsp.enable("eslint")

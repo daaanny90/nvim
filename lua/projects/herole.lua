@@ -34,9 +34,29 @@ vim.lsp.config["ts_ls"] = {
   },
 }
 
+-- Configure ESLint LSP for linting
+vim.lsp.config["eslint"] = {
+  cmd = { "vscode-eslint-language-server", "--stdio" },
+  filetypes = { "javascript", "javascriptreact", "typescript", "typescriptreact", "vue" },
+  root_markers = { ".eslintrc.js", ".eslintrc.json", ".eslintrc", "eslint.config.js", "package.json", ".git" },
+  capabilities = capabilities,
+  on_attach = function(client, bufnr)
+    -- Auto-fix on save
+    vim.api.nvim_create_autocmd("BufWritePre", {
+      buffer = bufnr,
+      command = "EslintFixAll",
+    })
+  end,
+  settings = {
+    format = false, -- Use conform for formatting, not ESLint
+    workingDirectory = { mode = "auto" },
+  },
+}
+
 -- Enable LSP servers
 vim.lsp.enable("vue_ls")
 vim.lsp.enable("ts_ls")
+vim.lsp.enable("eslint")
 
 -- DAP - PHP XDEBUG
 -- FIXME: not working at all. Server goes up but debug breakpoints don't work

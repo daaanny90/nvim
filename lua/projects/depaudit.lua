@@ -32,9 +32,22 @@ vim.lsp.config["jsonls"] = {
   },
 }
 
+-- Configure ESLint LSP for linting
+vim.lsp.config["eslint"] = {
+  cmd = { "vscode-eslint-language-server", "--stdio" },
+  filetypes = { "javascript", "javascriptreact", "typescript", "typescriptreact" },
+  root_markers = { ".eslintrc.js", ".eslintrc.json", ".eslintrc", "eslint.config.js", "package.json", ".git" },
+  capabilities = capabilities,
+  settings = {
+    format = false,
+    workingDirectory = { mode = "auto" },
+  },
+}
+
 -- Enable LSP servers
 vim.lsp.enable("ts_ls")
 vim.lsp.enable("jsonls")
+vim.lsp.enable("eslint")
 
 -- EslintFixAll on save through eslint_d and conform stopped working for now reason
 -- this fixes the problem. Configuration in conform is still on autosave = true
