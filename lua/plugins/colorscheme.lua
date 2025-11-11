@@ -127,6 +127,11 @@ return { -- You can easily change to a different colorscheme.
   --   lazy = false,
   --   priority = 1000,
   --   config = function()
+  --     require('nordic').setup({
+  --       cursorline = {
+  --         blend = 0,
+  --       }
+  --     })
   --     require('nordic').load()
   --   end,
   -- },
@@ -270,18 +275,27 @@ return { -- You can easily change to a different colorscheme.
     priority = 1000,
     opts = {},
     config = function()
-      require("solarized-osaka").setup({
-        styles = {
-          -- Style to be applied to different syntax groups
-          -- Value is any valid attr-list value for `:help nvim_set_hl`
-          comments = { italic = true },
-          keywords = { italic = true },
-        },
-        on_highlights = function(highlights, colors)
-          highlights.Visual = { bg = colors.base01, reverse = false }
-        end,
-      })
+    --   require("solarized-osaka").setup({
+    --     styles = {
+    --       -- Style to be applied to different syntax groups
+    --       -- Value is any valid attr-list value for `:help nvim_set_hl`
+    --       comments = { italic = true },
+    --       keywords = { italic = true },
+    --     },
+    --     on_highlights = function(highlights, colors)
+    --       highlights.Visual = { bg = colors.base01, reverse = false }
+    --     end,
+    --   })
       vim.cmd.colorscheme("solarized-osaka")
     end,
   },
+  --
+  -- {
+  --   "rebelot/kanagawa.nvim",
+  --   lazy = false,
+  --   priority = 1000,
+  --   init = function()
+  --     vim.cmd.colorscheme("kanagawa-wave")
+  --   end,
+  -- }
 }
