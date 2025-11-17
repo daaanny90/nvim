@@ -30,7 +30,7 @@ return { -- Autoformat
     },
     format_on_save = function(bufnr)
       return {
-        timeout_ms = 500,
+        timeout_ms = 3000,
         lsp_fallback = false,
       }
     end,

@@ -9,7 +9,7 @@ vim.lsp.config.vue_ls = {
   capabilities = capabilities,
   init_options = {
     vue = {
-      hybridMode = false,
+      hybridMode = true,
     },
     typescript = {
       tsdk = "/Users/dasp/.nvm/versions/node/v18.19.0/lib/node_modules/typescript/lib",
@@ -42,16 +42,47 @@ vim.lsp.config.eslint = {
   filetypes = { "javascript", "javascriptreact", "typescript", "typescriptreact", "vue" },
   root_markers = { ".eslintrc.js", ".eslintrc.json", ".eslintrc", "eslint.config.js", "package.json", ".git" },
   capabilities = capabilities,
+  on_attach = function(client, bufnr)
+    -- Create EslintFixAll command for manual use (optional)
+    vim.api.nvim_buf_create_user_command(bufnr, "EslintFixAll", function()
+      vim.lsp.buf.code_action({
+        context = {
+          only = { "source.fixAll.eslint" },
+          diagnostics = {},
+        },
+        apply = true,
+      })
+    end, {
+      desc = "Fix all ESLint problems",
+    })
+  end,
   settings = {
-    format = false, -- Use conform for formatting, not ESLint
+    -- Formatting is handled by conform.nvim
+    format = false,
+    -- Enable linting/validation
+    validate = "on",
+    -- Automatically run lint after file save
+    run = "onType",
+    -- Working directory settings
     workingDirectory = { mode = "auto" },
-    -- this empty settings below are needed in order to make the linter work
-    rulesCustomizations = {},
-    problems = {},
-    nodePath = "",
+    -- Enable code actions
+    codeAction = {
+      disableRuleComment = {
+        enable = true,
+        location = "separateLine",
+      },
+      showDocumentation = {
+        enable = true,
+      },
+    },
+    -- Experimental features
     experimental = {
       useFlatConfig = false,
     },
+
+    nodePath = "",
+    problems = {},
+    rulesCustomizations = {},
   },
 }
 vim.lsp.enable("eslint")
