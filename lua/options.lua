@@ -43,6 +43,10 @@ vim.opt.fillchars = "eob: "
 
 -- customize gitsigns
 vim.diagnostic.config({
+  virtual_text = false,
+  virtual_lines = {
+    current_line = true,
+  },
   signs = {
     text = {
       [vim.diagnostic.severity.ERROR] = "❌",

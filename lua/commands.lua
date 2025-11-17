@@ -144,6 +144,7 @@ local function run_pre_commit_checks()
     -- Run the check
     vim.fn.jobstart(check.cmd, {
       cwd = root,
+      env = vim.fn.extend(vim.fn.environ(), { NODE_ENV = "development" }),
       stdout_buffered = false,
       stderr_buffered = false,
       on_stdout = function(_, data)
