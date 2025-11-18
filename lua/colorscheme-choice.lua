@@ -93,6 +93,9 @@
 vim.cmd.colorscheme("kanagawa-dragon")
 -- vim.cmd.colorscheme("kanagawa-lotus")
 
+-- EVERFOREST variants
+-- vim.cmd.colorscheme("everforest")
+
 -- ============================================================================
 -- Custom highlight overrides
 -- ============================================================================
