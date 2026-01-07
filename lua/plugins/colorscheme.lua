@@ -171,6 +171,7 @@ return {
     priority = 1000,
     config = function()
       vim.g.xcodedarkhc_green_comments = 1
+      vim.g.xcodedark_green_comments = 1
     end,
   },
 
@@ -261,6 +262,19 @@ return {
       -- directly inside the plugin declaration.
       vim.g.everforest_enable_italic = true
       vim.g.everforest_background = "hard"
+    end,
+  },
+
+  {
+    "maxmx03/solarized.nvim",
+    lazy = false,
+    priority = 1000,
+    ---@type solarized.config
+    opts = {},
+    config = function(_, opts)
+      vim.o.termguicolors = true
+      vim.o.background = "dark"
+      require("solarized").setup(opts)
     end,
   },
 

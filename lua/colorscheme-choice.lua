@@ -90,11 +90,14 @@
 -- KANAGAWA variants
 -- vim.cmd.colorscheme("kanagawa")
 -- vim.cmd.colorscheme("kanagawa-wave")
-vim.cmd.colorscheme("kanagawa-dragon")
+-- vim.cmd.colorscheme("kanagawa-dragon")
 -- vim.cmd.colorscheme("kanagawa-lotus")
 
 -- EVERFOREST variants
--- vim.cmd.colorscheme("everforest")
+vim.cmd.colorscheme("everforest")
+
+-- SOLARIZED
+-- vim.cmd.colorscheme("solarized")
 
 -- ============================================================================
 -- Custom highlight overrides
