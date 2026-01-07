@@ -29,6 +29,10 @@ return {
         path = "depaudit",
         config = "~/.config/nvim/lua/projects/depaudit",
       },
+      {
+        path = "ui-library",
+        config = "~/.config/nvim/lua/projects/heroleui",
+      },
     },
 
     silent = false,
