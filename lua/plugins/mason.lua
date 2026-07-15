@@ -3,11 +3,13 @@
 return {
   "williamboman/mason.nvim",
   config = function()
-    require("mason").setup()
+    require("mason").setup({
+      ui = { check_outdated_packages_on_open = true },
+    })
   end,
   opts = function(_, opts)
     opts.ensure_installed = opts.ensure_installed or {}
-    vim.list_extend(opts.ensure_installed, { "eslint-lsp" })
+    vim.list_extend(opts.ensure_installed, { "eslint-lsp", "json-lsp", "yaml-language-server", "emmet-language-server", "css-lsp" })
   end,
 }
 

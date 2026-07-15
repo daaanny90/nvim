@@ -17,16 +17,7 @@ vim.lsp.config["jsonls"] = {
   capabilities = capabilities,
   settings = {
     json = {
-      schemas = {
-        {
-          fileMatch = { "package.json" },
-          url = "https://json.schemastore.org/package.json",
-        },
-        {
-          fileMatch = { "tsconfig*.json" },
-          url = "https://json.schemastore.org/tsconfig.json",
-        },
-      },
+      schemas = require("schemastore").json.schemas(),
       validate = { enable = true },
     },
   },
@@ -45,9 +36,18 @@ vim.lsp.config["eslint"] = {
 }
 
 -- Enable LSP servers
-vim.lsp.enable("ts_ls")
+-- vim.lsp.enable("ts_ls")  -- DISABLED: replaced by typescript-tools.nvim (uncomment to revert)
 vim.lsp.enable("jsonls")
 vim.lsp.enable("eslint")
+
+-- Configure Emmet Language Server
+vim.lsp.config.emmet_language_server = {
+  cmd = { "emmet-language-server", "--stdio" },
+  filetypes = { "html", "css", "scss", "sass", "less", "vue", "javascriptreact", "typescriptreact" },
+  root_markers = { "package.json", ".git" },
+  capabilities = capabilities,
+}
+vim.lsp.enable("emmet_language_server")
 
 -- EslintFixAll on save through eslint_d and conform stopped working for now reason
 -- this fixes the problem. Configuration in conform is still on autosave = true

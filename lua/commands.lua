@@ -4,17 +4,66 @@
 ---- Pre-commit checks command ---------
 ----------------------------------------
 local function run_pre_commit_checks()
-  local checks = {
-    { name = "Unit Tests", cmd = "pnpm run test:unit" },
-    { name = "e2e Tests", cmd = "pnpm run test:e2e" },
-    { name = "Type Check", cmd = "pnpm run type-check" },
-    { name = "Lint", cmd = "pnpm run lint" },
+  local all_checks = {
+    { name = "Unit Tests", cmd = "pnpm run test:unit", script = "test:unit" },
+    { name = "e2e Tests", cmd = "pnpm run test:e2e", script = "test:e2e" },
+    { name = "Type Check", cmd = "pnpm run type-check", script = "type-check" },
+    { name = "Lint", cmd = "pnpm run lint", script = "lint" },
   }
 
-  -- Find project root
+  -- Find project root (prefer package.json for JS projects)
   local root = vim.fs.root(0, { "package.json", ".git" })
   if not root then
     vim.notify("⚠️  Not in a project directory", vim.log.levels.WARN)
+    return
+  end
+
+  -- Read package.json and filter to only scripts that exist
+  local package_json_path = root .. "/package.json"
+  local f = io.open(package_json_path, "r")
+  local scripts = {}
+  if f then
+    local content = f:read("*a")
+    f:close()
+    if content then
+      local ok, pkg = pcall(vim.json.decode, content)
+      if ok and pkg and pkg.scripts then
+        scripts = pkg.scripts
+      end
+    end
+  end
+
+  -- Detect herole monorepo: package in subdir (e.g. apps/vue) with docker-compose at repo root.
+  -- E2E must run via docker (paul service) to reach herole.devel.local on branch network.
+  local repo_root = root
+  local parent = vim.fs.dirname(root:gsub("[/\\]+$", ""))
+  if parent and parent ~= root then
+    local dc_file = io.open(parent .. "/docker-compose.yml", "r")
+    if dc_file then
+      local content = dc_file:read("*a")
+      dc_file:close()
+      if content and content:find("paul") and content:find("e2e") then
+        repo_root = parent
+      end
+    end
+  end
+
+  local checks = {}
+  for _, c in ipairs(all_checks) do
+    if scripts[c.script] then
+      local check = vim.deepcopy(c)
+      check.cwd = root
+      -- herole e2e: run via docker compose from repo root (paul can reach herole.devel.local)
+      if c.script == "test:e2e" and repo_root ~= root then
+        check.cmd = "docker compose --profile e2e run paul"
+        check.cwd = repo_root
+      end
+      table.insert(checks, check)
+    end
+  end
+
+  if #checks == 0 then
+    vim.notify("⚠️  No matching scripts found in package.json", vim.log.levels.WARN)
     return
   end
 
@@ -51,9 +100,15 @@ local function run_pre_commit_checks()
   local results = {}
   local current_check = 1
   local lines = {}
+  local current_job_id = nil
+  local aborted = false
 
   local update_pending = false
   local highlights = {}
+
+  local function strip_ansi(str)
+    return str:gsub("\27%[[%d;]*m", "")
+  end
 
   local function append_line(line, hl_group)
     table.insert(lines, line)
@@ -91,6 +146,38 @@ local function run_pre_commit_checks()
     end)
   end
 
+  local function setup_close_keymaps()
+    vim.keymap.set("n", "q", function()
+      if current_job_id then
+        aborted = true
+        vim.fn.jobstop(current_job_id)
+      end
+      vim.api.nvim_win_close(win, true)
+    end, { buffer = buf, silent = true })
+    vim.keymap.set("n", "<Esc>", function()
+      if current_job_id then
+        aborted = true
+        vim.fn.jobstop(current_job_id)
+      end
+      vim.api.nvim_win_close(win, true)
+    end, { buffer = buf, silent = true })
+  end
+
+  -- Ctrl+C to abort (stop current job)
+  vim.keymap.set("n", "<C-c>", function()
+    if current_job_id then
+      aborted = true
+      vim.fn.jobstop(current_job_id)
+      append_line("")
+      append_line("⚠️  Cancelled by user (Ctrl+C)", "WarningMsg")
+      append_line("")
+      append_line("Press 'q' or <Esc> to close this window", "Comment")
+      update_display()
+      vim.notify("Pre-commit checks cancelled", vim.log.levels.WARN)
+      setup_close_keymaps()
+    end
+  end, { buffer = buf, silent = true })
+
   local function run_next_check()
     if current_check > #checks then
       -- All checks done, show summary
@@ -125,14 +212,7 @@ local function run_pre_commit_checks()
       append_line("")
       append_line("Press 'q' or <Esc> to close this window", "Comment")
       update_display()
-
-      -- Set keymaps to close window
-      vim.keymap.set("n", "q", function()
-        vim.api.nvim_win_close(win, true)
-      end, { buffer = buf, silent = true })
-      vim.keymap.set("n", "<Esc>", function()
-        vim.api.nvim_win_close(win, true)
-      end, { buffer = buf, silent = true })
+      setup_close_keymaps()
       return
     end
 
@@ -157,8 +237,8 @@ local function run_pre_commit_checks()
     local update_interval = 100 -- Update display every 100ms
 
     -- Run the check
-    vim.fn.jobstart(check.cmd, {
-      cwd = root,
+    current_job_id = vim.fn.jobstart(check.cmd, {
+      cwd = check.cwd or root,
       env = vim.fn.extend(vim.fn.environ(), { NODE_ENV = "development" }),
       stdout_buffered = false,
       stderr_buffered = false,
@@ -166,8 +246,9 @@ local function run_pre_commit_checks()
         if data then
           for _, line in ipairs(data) do
             if line ~= "" then
-              table.insert(output_lines, line)
-              append_line(line)
+              local clean = strip_ansi(line)
+              table.insert(output_lines, clean)
+              append_line(clean)
             end
           end
           -- Throttle updates to avoid too many redraws
@@ -182,8 +263,9 @@ local function run_pre_commit_checks()
         if data then
           for _, line in ipairs(data) do
             if line ~= "" then
-              table.insert(output_lines, line)
-              append_line(line, "WarningMsg")
+              local clean = strip_ansi(line)
+              table.insert(output_lines, clean)
+              append_line(clean, "WarningMsg")
             end
           end
           -- Throttle updates to avoid too many redraws
@@ -195,6 +277,11 @@ local function run_pre_commit_checks()
         end
       end,
       on_exit = function(_, exit_code)
+        current_job_id = nil
+        if aborted then
+          return
+        end
+
         local success = exit_code == 0
         table.insert(results, { name = check.name, success = success, output = output_lines })
 
@@ -216,8 +303,10 @@ local function run_pre_commit_checks()
     })
   end
 
-  -- Start first check
+  -- Start first check (q/Esc to close from the start)
+  setup_close_keymaps()
   append_line(string.format("📁 Project: %s", root), "Comment")
+  append_line("Press Ctrl+C to abort, q or <Esc> to close", "Comment")
   append_line("")
   update_display()
   run_next_check()

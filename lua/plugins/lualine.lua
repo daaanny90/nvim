@@ -31,6 +31,29 @@ local function show_macro_recording()
   end
 end
 
+local function lsp_client_at(i)
+  return function()
+    local clients = vim.lsp.get_clients({ bufnr = 0 })
+    local idx = 0
+    for _, c in ipairs(clients) do
+      idx = idx + 1
+      if idx == i and type(c) == "table" then
+        return (c.name and c.name ~= "") and c.name or ""
+      end
+    end
+    return ""
+  end
+end
+
+-- Mason: mostra count quando ci sono update (popolato da check in background)
+local function mason_updates()
+  local n = vim.g.mason_outdated_count or 0
+  if n > 0 then
+    return "Mason " .. n .. " ↑"
+  end
+  return ""
+end
+
 return {
   "nvim-lualine/lualine.nvim",
   event = "VeryLazy",
@@ -38,12 +61,12 @@ return {
   init = function()
     vim.g.lualine_laststatus = vim.o.laststatus
     if vim.fn.argc(-1) > 0 then
-      -- set an empty statusline till lualine loads
       vim.o.statusline = " "
     else
-      -- hide the statusline on the starter page
       vim.o.laststatus = 0
     end
+    -- Garantisce che LualineLsp esista (sfondo blu, testo bianco) per i componenti LSP
+    vim.api.nvim_set_hl(0, "LualineLsp", { fg = "#FFFFFF", bg = "#2563EB" })
   end,
   opts = function()
     vim.o.laststatus = vim.g.lualine_laststatus
@@ -54,6 +77,25 @@ return {
         disabled_filetypes = { statusline = { "dashboard", "alpha", "starter" } },
         always_divide_middle = false,
         theme = "auto",
+        refresh = {
+          statusline = 1000,
+          tabline = 1000,
+          winbar = 1000,
+          refresh_time = 16,
+          events = {
+            "WinEnter",
+            "BufEnter",
+            "BufWritePost",
+            "SessionLoadPost",
+            "FileChangedShellPost",
+            "VimResized",
+            "Filetype",
+            "ModeChanged",
+            "DiagnosticChanged",  -- quando cambiano errori/warning LSP
+            "User LspAttach",
+            "User LspDetach",
+          },
+        },
       },
       sections = {
         lualine_a = { "mode" },
@@ -84,16 +126,69 @@ return {
         },
         lualine_x = {
           {
+            mason_updates,
+            cond = function() return (vim.g.mason_outdated_count or 0) > 0 end,
+            color = { fg = "#D4A84B" },
+          },
+          {
+            function()
+              local n = require("lazy.status").updates()
+              return (type(n) == "string" or (type(n) == "number" and n > 0)) and tostring(n) or ""
+            end,
+            cond = function() return require("lazy.status").has_updates() end,
+            color = { fg = "#D4A84B" },
+          },
+          {
+            function()
+              return vim.g.nvim_update_available and "Nvim ↑" or ""
+            end,
+            cond = function()
+              return vim.g.nvim_update_available == true
+            end,
+            color = { fg = "#D4A84B" },
+          },
+          {
             "macro-recording",
             fmt = show_macro_recording,
           },
-          { "filetype", icon_only = true },
+          {
+            function()
+              local ok, devicons = pcall(require, "nvim-web-devicons")
+              if ok and devicons then
+                return devicons.get_icon_by_filetype(vim.bo.filetype, { default = true }) or ""
+              end
+              return ""
+            end,
+          },
         },
         lualine_y = {
           { "progress", separator = " ", padding = { left = 1, right = 0 } },
           { current_working_dir },
         },
-        lualine_z = { { "location" } },
+        lualine_z = vim.iter({
+          (function()
+            local out = {}
+            for i = 1, 6 do
+              out[i] = {
+                lsp_client_at(i),
+                cond = function()
+                  local clients = vim.lsp.get_clients({ bufnr = 0 })
+                  local idx = 0
+                  for _ in ipairs(clients) do
+                    idx = idx + 1
+                    if idx == i then return true end
+                  end
+                  return false
+                end,
+                separator = " ",
+                padding = { left = 1, right = 1 },
+                color = "LualineLsp",
+              }
+            end
+            return out
+          end)(),
+          { "location" },
+        }):flatten():totable(),
       },
       inactive_sections = {
         lualine_a = {},

@@ -20,5 +20,14 @@ vim.lsp.config["eslint"] = {
   },
 }
 
-vim.lsp.enable("ts_ls")
+-- vim.lsp.enable("ts_ls")  -- DISABLED: replaced by typescript-tools.nvim (uncomment to revert)
 vim.lsp.enable("eslint")
+
+-- Configure Emmet Language Server
+vim.lsp.config.emmet_language_server = {
+  cmd = { "emmet-language-server", "--stdio" },
+  filetypes = { "html", "css", "scss", "sass", "less", "vue", "javascriptreact", "typescriptreact" },
+  root_markers = { "package.json", ".git" },
+  capabilities = capabilities,
+}
+vim.lsp.enable("emmet_language_server")

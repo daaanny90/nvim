@@ -3,6 +3,13 @@
 -- Uncomment ONE line below to activate a colorscheme
 -- ============================================================================
 
+-- ZED (recreates the Zed editor experience — switch between the variants)
+-- vim.cmd.colorscheme("zed-one-dark")
+-- vim.cmd.colorscheme("zed-ayu-mirage")
+-- vim.cmd.colorscheme("zed-graph-paper")
+vim.cmd.colorscheme("zed-oscilloscope")
+-- vim.cmd.colorscheme("zed-blueprint")
+
 -- TOKYONIGHT variants
 -- vim.cmd.colorscheme("tokyonight")
 -- vim.cmd.colorscheme("tokyonight-night")
@@ -51,8 +58,6 @@
 -- ROSE PINE variants
 -- vim.cmd.colorscheme("rose-pine")
 -- vim.cmd.colorscheme("rose-pine-main")
--- vim.cmd.colorscheme("rose-pine-moon")
--- vim.cmd.colorscheme("rose-pine-dawn")
 
 -- LACKLUSTER variants
 -- vim.cmd.colorscheme("lackluster")
@@ -62,7 +67,7 @@
 -- YUGEN
 -- vim.cmd.colorscheme("yugen")
 
--- XCODE variants
+-- XCODE variants (vim-colors-xcode)
 -- vim.cmd.colorscheme("xcode")
 -- vim.cmd.colorscheme("xcodedark")
 -- vim.cmd.colorscheme("xcodedarkhc")
@@ -70,6 +75,19 @@
 -- vim.cmd.colorscheme("xcodelight")
 -- vim.cmd.colorscheme("xcodelighthc")
 -- vim.cmd.colorscheme("xcodewwdc")
+
+-- XCODE LUA variants (custom, authentic Xcode colors)
+-- vim.cmd.colorscheme("xcode-dark")
+-- vim.cmd.colorscheme("xcode-light")
+
+-- iTERM2 DARK BACKGROUND (custom - iTerm2 built-in Dark Background)
+-- vim.cmd.colorscheme("iterm2-dark-background")
+
+-- CLAUDE DESKTOP (custom - matches Claude Desktop app dark theme)
+-- vim.cmd.colorscheme("claude-desktop")
+
+-- CLAUDE CODE (custom - matches new Claude Code macOS app)
+-- vim.cmd.colorscheme("claude-code")
 
 -- ENFOCADO
 -- vim.cmd.colorscheme("enfocado")
@@ -94,7 +112,7 @@
 -- vim.cmd.colorscheme("kanagawa-lotus")
 
 -- EVERFOREST variants
-vim.cmd.colorscheme("everforest")
+-- vim.cmd.colorscheme("everforest")
 
 -- SOLARIZED
 -- vim.cmd.colorscheme("solarized")
@@ -123,6 +141,9 @@ local function apply_custom_highlights()
   vim.cmd([[highlight DiagnosticSignWarn guibg=NONE ctermbg=NONE]])
   vim.cmd([[highlight DiagnosticSignInfo guibg=NONE ctermbg=NONE]])
   vim.cmd([[highlight DiagnosticSignHint guibg=NONE ctermbg=NONE]])
+
+  -- LSP in lualine: sfondo blu, testo bianco (come line:col)
+  vim.api.nvim_set_hl(0, "LualineLsp", { fg = "#FFFFFF", bg = "#2563EB" })
 end
 
 -- Apply highlights now

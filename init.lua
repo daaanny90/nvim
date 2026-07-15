@@ -21,7 +21,11 @@ require("lazy").setup({
   spec = {
     { import = "plugins" },
   },
-  -- dev = '~/.config/nvim/lua/plugins/my-plugins',
+  checker = {
+    enabled = true,
+    notify = true,
+    frequency = 3600, -- check every hour
+  },
 })
 
 -- The line beneath this is called `modeline`. See `:help modeline`

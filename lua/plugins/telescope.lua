@@ -20,7 +20,6 @@ vim.api.nvim_create_autocmd('FileType', {
 return { -- Fuzzy Finder (files, lsp, etc)
   'nvim-telescope/telescope.nvim',
   event = 'VimEnter',
-  branch = '0.1.x',
   dependencies = {
     'nvim-lua/plenary.nvim',
     { -- If encountering errors, see telescope-fzf-native README for installation instructions
@@ -48,20 +47,6 @@ return { -- Fuzzy Finder (files, lsp, etc)
           'node_modules',
           '.git',
         },
-        -- path_display = { 'smart' },
-        -- layout_strategy = 'vertical',
-
-        -- prompt_prefix = ' ',
-        -- selection_caret = ' ',
-        -- path_display = { filenameFirst },
-        -- dynamic_preview_title = true,
-        -- winblend = 10,
-        -- sorting_strategy = 'ascending',
-        -- layout_strategy = 'vertical',
-        -- layout_config = {
-        --   prompt_position = 'bottom',
-        --   height = 0.95,
-        -- },
       },
       pickers = {
         oldfiles = {
@@ -96,9 +81,7 @@ return { -- Fuzzy Finder (files, lsp, etc)
     vim.keymap.set('n', '<leader>sw', builtin.grep_string, { desc = '[S]earch current [W]ord' })
     vim.keymap.set('n', '<leader>sg', builtin.live_grep, { desc = '[S]earch by [G]rep' })
     vim.keymap.set('n', '<leader>sd', builtin.diagnostics, { desc = '[S]earch [D]iagnostics' })
-    -- vim.keymap.set('n', '<leader>sr', builtin.resume, { desc = '[S]earch [R]esume' })
     vim.keymap.set('n', '<leader>fr', builtin.oldfiles, { desc = '[F]ind Recent Files ("." for repeat)' })
-    -- vim.keymap.set('n', '<leader><leader>', builtin.buffers, { desc = '[ ] Find existing buffers' })
 
     -- Slightly advanced example of overriding default behavior and theme
     vim.keymap.set('n', '<leader>/', function()

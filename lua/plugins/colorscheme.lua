@@ -128,15 +128,6 @@ return {
     "nyoom-engineering/oxocarbon.nvim",
     lazy = false,
     priority = 1000,
-    -- config = function()
-    --   require("oxocarbon").setup({
-    --     palettes = {
-    --       oxocarbon = {
-    --         bg1 = "#ffffff",
-    --       },
-    --     },
-    --   })
-    -- end,
   },
 
   {
@@ -175,6 +166,57 @@ return {
     end,
   },
 
+  -- iTerm2 Dark Background (custom theme - iTerm2 built-in "Dark Background")
+  {
+    "daaanny90/iterm2-dark-background.nvim",
+    lazy = false,
+    priority = 1000,
+    config = function()
+      require("iterm2dark").setup({
+        transparent = false,
+        vivid = true,
+        italic_comments = true,
+        bold_keywords = false,
+        terminal_colors = true,
+      })
+    end,
+  },
+
+  -- Claude Desktop (custom theme - matches Claude Desktop app dark theme)
+  {
+    "daaanny90/claude-desktop.nvim",
+    lazy = false,
+    priority = 1000,
+    config = function()
+      require("claudetheme").setup({
+        transparent = false,
+        vivid = false,
+        italic_comments = true,
+        bold_keywords = false,
+        terminal_colors = true,
+      })
+    end,
+  },
+
+  -- Xcode Lua (custom theme - authentic Xcode colors)
+  {
+    "xcode-lua",
+    dir = vim.fn.stdpath("config") .. "/lua/plugins/my-plugins/xcode-lua",
+    lazy = false,
+    priority = 1000,
+    config = function()
+      require("xcode").setup({
+        style = "dark", -- "dark" or "light"
+        transparent = false, -- Enable transparent background
+        italic_comments = true, -- Italicize comments
+        bold_keywords = true, -- Bold keywords (false for softer look)
+        terminal_colors = true, -- Set terminal colors
+        dim_inactive = false, -- Dim inactive windows
+        lualine_bold = false, -- Bold lualine section headers
+      })
+    end,
+  },
+
   {
     "wuelnerdotexe/vim-enfocado",
     lazy = false,
@@ -204,13 +246,6 @@ return {
           types = {},
           operators = {},
         },
-        -- color_overrides = {
-        --   mocha = {
-        --     base = "#0a0a0a",
-        --     mantle = "#191919",
-        --     crust = "#191919",
-        --   },
-        -- },
         integrations = {
           noice = true,
           notify = true,
@@ -276,6 +311,15 @@ return {
       vim.o.background = "dark"
       require("solarized").setup(opts)
     end,
+  },
+
+  -- Local: Zed editor look-alike + custom variants (see zed-nvim/lua/zed/palette.lua)
+  {
+    "zed-nvim",
+    dir = vim.fn.stdpath("config") .. "/lua/plugins/my-plugins/zed-nvim",
+    name = "zed-nvim",
+    lazy = false,
+    priority = 1000,
   },
 
   -- ============================================================================

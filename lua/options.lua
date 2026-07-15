@@ -9,8 +9,9 @@ vim.opt.undofile = true -- Save undo history
 vim.opt.ignorecase = true -- Case-insensitive searching UNLESS \C or one or more capital letters in the search term
 vim.opt.smartcase = true
 vim.opt.signcolumn = "yes" -- Keep signcolumn on by default
+vim.opt.pumheight = 12 -- Limit completion menu height
 vim.opt.updatetime = 250 -- Decrease update time
-vim.opt.timeoutlen = 300 -- Displays which-key popup sooner
+vim.opt.timeoutlen = 600 -- Wait for mapping completion (300 was too short: leader+p often triggered paste)
 vim.opt.termguicolors = true
 vim.o.background = "dark"
 
@@ -24,7 +25,7 @@ vim.opt.listchars = { tab = "» ", trail = "·", nbsp = "␣" }
 
 vim.opt.inccommand = "split" -- Preview substitutions live, as you type!
 
-vim.opt.cursorline = true -- Show which line your cursor is on
+vim.opt.cursorline = false
 
 -- Minimal number of screen lines to keep above and below the cursor.
 vim.opt.scrolloff = 10

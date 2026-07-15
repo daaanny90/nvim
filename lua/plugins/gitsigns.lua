@@ -10,7 +10,7 @@ return { -- Adds git related signs to the gutter, as well as utilities for manag
     },
     current_line_blame = true,
     current_line_blame_opts = {
-      delay = 0,
+      delay = 500,
     },
     current_line_blame_formatter = '<author> • <author_time> • <summary>',
 

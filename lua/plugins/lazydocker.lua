@@ -5,7 +5,7 @@ return {
   config = function()
     require('lazydocker').setup()
 
-    vim.keymap.set('n', '<leader>dd', '<cmd>LazyDocker<cr>', { desc = 'Open Lazy [DD]ocker' })
+    vim.keymap.set('n', '<leader>dd', function() require('lazydocker').toggle() end, { desc = 'Open Lazy [DD]ocker' })
   end,
   dependencies = {
     'MunifTanjim/nui.nvim',

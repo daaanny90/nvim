@@ -4,7 +4,7 @@
 
 return {
   'folke/flash.nvim',
-  event = 'VeryLazy',
+  lazy = false,
   vscode = true,
   opts = {},
     -- stylua: ignore
