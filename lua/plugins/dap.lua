@@ -13,6 +13,27 @@ return {
     dapui.setup()
     require("nvim-dap-virtual-text").setup({ commented = true })
 
+    -- breakpoint signs: colored nerd-font glyphs instead of the default
+    -- low-contrast 'B'; re-applied on ColorScheme (themes clear custom hl)
+    local function dap_sign_colors()
+      vim.api.nvim_set_hl(0, "DapBreakpoint", { fg = "#ff3b30" })
+      vim.api.nvim_set_hl(0, "DapBreakpointCondition", { fg = "#ff9500" })
+      vim.api.nvim_set_hl(0, "DapBreakpointRejected", { fg = "#8e8e93" })
+      vim.api.nvim_set_hl(0, "DapLogPoint", { fg = "#61afef" })
+      vim.api.nvim_set_hl(0, "DapStopped", { fg = "#ffcc00" })
+    end
+    dap_sign_colors()
+    vim.api.nvim_create_autocmd("ColorScheme", {
+      group = vim.api.nvim_create_augroup("dap-sign-colors", { clear = true }),
+      callback = dap_sign_colors,
+    })
+
+    vim.fn.sign_define("DapBreakpoint", { text = "", texthl = "DapBreakpoint" })
+    vim.fn.sign_define("DapBreakpointCondition", { text = "", texthl = "DapBreakpointCondition" })
+    vim.fn.sign_define("DapBreakpointRejected", { text = "", texthl = "DapBreakpointRejected" })
+    vim.fn.sign_define("DapLogPoint", { text = "", texthl = "DapLogPoint" })
+    vim.fn.sign_define("DapStopped", { text = "", texthl = "DapStopped", linehl = "Visual" })
+
     -- js-debug (vscode-js-debug, installed via mason): one adapter serves both
     -- node processes (pwa-node) and browser debugging (pwa-chrome)
     for _, adapter in ipairs({ "pwa-node", "pwa-chrome" }) do
