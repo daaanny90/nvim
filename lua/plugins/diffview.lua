@@ -16,5 +16,20 @@ return {
     },
     { "<leader>gh", "<cmd>DiffviewFileHistory %<cr>", desc = "Git [h]istory of current file" },
   },
-  opts = {},
+  opts = {
+    enhanced_diff_hl = true, -- dim the filler areas, stronger hl on changed regions
+    hooks = {
+      diff_buf_win_enter = function(_, winid)
+        -- less gutter noise inside diff windows
+        vim.wo[winid].foldcolumn = "0"
+        vim.wo[winid].relativenumber = false
+      end,
+    },
+    keymaps = {
+      -- q closes the whole view from anywhere, not only from the file panel
+      view = { { "n", "q", "<cmd>DiffviewClose<cr>", { desc = "Close diffview" } } },
+      file_panel = { { "n", "q", "<cmd>DiffviewClose<cr>", { desc = "Close diffview" } } },
+      file_history_panel = { { "n", "q", "<cmd>DiffviewClose<cr>", { desc = "Close diffview" } } },
+    },
+  },
 }

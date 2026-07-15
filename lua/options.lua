@@ -39,8 +39,8 @@ vim.opt.undolevels = 10000
 vim.opt.spell = true
 vim.opt.spelllang = { "en_us", "de_de" }
 
--- do not show the tilde for blank lines
-vim.opt.fillchars = "eob: "
+-- no tilde for blank lines; hatched area instead of dashes for diff filler lines
+vim.opt.fillchars = { eob = " ", diff = "╱" }
 
 -- customize gitsigns
 vim.diagnostic.config({
