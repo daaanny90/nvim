@@ -213,7 +213,3 @@ for _, ft in ipairs({ "javascript", "typescript", "vue" }) do
     dap.configurations[ft] = configs
   end
 end
-
--- VIM TEST
--- somehow vim test do not recognize vitest out of the box. This fix the problem
-vim.g["test#javascript#runner"] = "vitest"

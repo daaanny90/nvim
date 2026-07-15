@@ -72,4 +72,4 @@ Resolved via lazy's `dev.path`:
 
 ## Removed plugins
 
-Per recent history: `avante`, `backseat`, `dap-ui`, `eslint-lsp` (as a standalone plugin), `nvim-lint`, `nvim-lspconfig`-based `lsp-config`, `spectre`. Do not reintroduce them without explicit user request — most were replaced (e.g. spectre → grug-far, lspconfig → native `vim.lsp`, nvim-lint → ESLint LSP).
+Per recent history: `avante`, `backseat`, `eslint-lsp` (as a standalone plugin), `nvim-lint`, `nvim-lspconfig`-based `lsp-config`, `spectre`, `vim-test` (replaced by neotest + neotest-vitest), `3rd/image.nvim` (never configured, iTerm2 lacks kitty graphics). Do not reintroduce them without explicit user request — most were replaced (e.g. spectre → grug-far, lspconfig → native `vim.lsp`, nvim-lint → ESLint LSP). Note: `dap-ui` was previously listed here by mistake — it is live and configured in `lua/plugins/dap.lua` alongside the js/vue DAP setup.
