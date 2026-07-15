@@ -42,12 +42,13 @@ vim.opt.spelllang = { "en_us", "de_de" }
 -- no tilde for blank lines; hatched area instead of dashes for diff filler lines
 vim.opt.fillchars = { eob = " ", diff = "╱" }
 
--- customize gitsigns
+-- diagnostics: inline rendering is done by tiny-inline-diagnostic.nvim
+-- (wraps long TS errors nicely); float on <leader>cd for the full detail
 vim.diagnostic.config({
   virtual_text = false,
-  virtual_lines = {
-    current_line = true,
-  },
+  virtual_lines = false,
+  severity_sort = true, -- errors before warnings, everywhere
+  float = { border = "rounded", source = true, max_width = 100 },
   signs = {
     text = {
       [vim.diagnostic.severity.ERROR] = " ",
