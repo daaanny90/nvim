@@ -196,6 +196,8 @@ local herole_chrome = {
   url = "http://localhost:8081",
   webRoot = "${workspaceFolder}/apps/vue",
   sourceMaps = true,
+  -- only Brave is installed; js-debug won't find Chrome on its own
+  runtimeExecutable = "/Applications/Brave Browser.app/Contents/MacOS/Brave Browser",
 }
 for _, ft in ipairs({ "javascript", "typescript", "vue" }) do
   local configs = dap.configurations[ft] or {}

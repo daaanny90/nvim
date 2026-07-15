@@ -27,6 +27,10 @@ return {
       }
     end
 
+    -- js-debug looks for Chrome/Chromium and won't find it on this system:
+    -- only Brave is installed (Chromium-based, works fine over CDP)
+    local browser = "/Applications/Brave Browser.app/Contents/MacOS/Brave Browser"
+
     -- generic JS/TS/Vue configurations; project files can prepend their own
     -- (see lua/projects/herole.lua for the herole Chrome launch on :8081)
     for _, ft in ipairs({ "javascript", "typescript", "vue" }) do
@@ -38,6 +42,7 @@ return {
           url = "http://localhost:5173",
           webRoot = "${workspaceFolder}",
           sourceMaps = true,
+          runtimeExecutable = browser,
         },
         {
           type = "pwa-node",
