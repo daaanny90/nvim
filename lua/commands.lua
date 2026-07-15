@@ -14,7 +14,7 @@ local function run_pre_commit_checks()
   -- Find project root (prefer package.json for JS projects)
   local root = vim.fs.root(0, { "package.json", ".git" })
   if not root then
-    vim.notify("⚠️  Not in a project directory", vim.log.levels.WARN)
+    vim.notify("  Not in a project directory", vim.log.levels.WARN)
     return
   end
 
@@ -63,7 +63,7 @@ local function run_pre_commit_checks()
   end
 
   if #checks == 0 then
-    vim.notify("⚠️  No matching scripts found in package.json", vim.log.levels.WARN)
+    vim.notify("  No matching scripts found in package.json", vim.log.levels.WARN)
     return
   end
 
@@ -82,7 +82,7 @@ local function run_pre_commit_checks()
     col = col,
     style = "minimal",
     border = "rounded",
-    title = " 🚀 Pre-Commit Checks ",
+    title = "  Pre-Commit Checks ",
     title_pos = "center",
   })
 
@@ -169,7 +169,7 @@ local function run_pre_commit_checks()
       aborted = true
       vim.fn.jobstop(current_job_id)
       append_line("")
-      append_line("⚠️  Cancelled by user (Ctrl+C)", "WarningMsg")
+      append_line("  Cancelled by user (Ctrl+C)", "WarningMsg")
       append_line("")
       append_line("Press 'q' or <Esc> to close this window", "Comment")
       update_display()
@@ -186,7 +186,7 @@ local function run_pre_commit_checks()
         "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━",
         "Comment"
       )
-      append_line("📊 SUMMARY", "Title")
+      append_line(" SUMMARY", "Title")
       append_line(
         "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━",
         "Comment"
@@ -195,7 +195,7 @@ local function run_pre_commit_checks()
 
       local all_passed = true
       for _, result in ipairs(results) do
-        local icon = result.success and "✅" or "❌"
+        local icon = result.success and "" or ""
         local status = result.success and "PASSED" or "FAILED"
         append_line(string.format("  %s %s: %s", icon, result.name, status), result.success and "String" or "Error")
         all_passed = all_passed and result.success
@@ -203,11 +203,11 @@ local function run_pre_commit_checks()
 
       append_line("")
       if all_passed then
-        append_line("🎉 All checks passed! Ready to push.", "String")
-        vim.notify("✅ All pre-commit checks passed!", vim.log.levels.INFO)
+        append_line(" All checks passed! Ready to push.", "String")
+        vim.notify(" All pre-commit checks passed!", vim.log.levels.INFO)
       else
-        append_line("❌ Some checks failed. Please fix issues before pushing.", "Error")
-        vim.notify("❌ Pre-commit checks failed!", vim.log.levels.ERROR)
+        append_line(" Some checks failed. Please fix issues before pushing.", "Error")
+        vim.notify(" Pre-commit checks failed!", vim.log.levels.ERROR)
       end
       append_line("")
       append_line("Press 'q' or <Esc> to close this window", "Comment")
@@ -222,7 +222,7 @@ local function run_pre_commit_checks()
       "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━",
       "Comment"
     )
-    append_line(string.format("🔄 Running: %s (%d/%d)", check.name, current_check, #checks), "Title")
+    append_line(string.format(" Running: %s (%d/%d)", check.name, current_check, #checks), "Title")
     append_line(
       "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━",
       "Comment"
@@ -230,7 +230,7 @@ local function run_pre_commit_checks()
     append_line("")
     update_display()
 
-    vim.notify(string.format("🔄 Running: %s", check.name), vim.log.levels.INFO)
+    vim.notify(string.format(" Running: %s", check.name), vim.log.levels.INFO)
 
     local output_lines = {}
     local last_update = vim.loop.now()
@@ -287,9 +287,9 @@ local function run_pre_commit_checks()
 
         append_line("")
         if success then
-          append_line(string.format("✅ %s completed successfully", check.name), "String")
+          append_line(string.format(" %s completed successfully", check.name), "String")
         else
-          append_line(string.format("❌ %s failed with exit code %d", check.name, exit_code), "Error")
+          append_line(string.format(" %s failed with exit code %d", check.name, exit_code), "Error")
           -- Show output summary if failed
           if #output_lines > 0 then
             append_line(string.format("   Output lines captured: %d", #output_lines), "Comment")
@@ -305,7 +305,7 @@ local function run_pre_commit_checks()
 
   -- Start first check (q/Esc to close from the start)
   setup_close_keymaps()
-  append_line(string.format("📁 Project: %s", root), "Comment")
+  append_line(string.format(" Project: %s", root), "Comment")
   append_line("Press Ctrl+C to abort, q or <Esc> to close", "Comment")
   append_line("")
   update_display()
@@ -400,7 +400,7 @@ local function generate_weekly_report()
   vim.api.nvim_win_set_cursor(0, { 13, 0 })
 
   vim.notify(
-    string.format("📝 Weekly report template created for %s (KW %s)", friday_date, week_number),
+    string.format(" Weekly report template created for %s (KW %s)", friday_date, week_number),
     vim.log.levels.INFO
   )
 end

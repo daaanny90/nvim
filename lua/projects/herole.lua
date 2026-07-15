@@ -185,6 +185,33 @@ dap.configurations.php = {
   },
 }
 
+-- DAP - JS/VUE (Chrome against the herole Vite dev server)
+-- Prepends the herole-specific launch config to the generic ones from
+-- lua/plugins/dap.lua. Guarded by name: nvim-projectconfig re-sources this
+-- file on every DirChanged, so a bare table.insert would duplicate entries.
+local herole_chrome = {
+  type = "pwa-chrome",
+  request = "launch",
+  name = "Chrome: herole Vite (localhost:8081, apps/vue)",
+  url = "http://localhost:8081",
+  webRoot = "${workspaceFolder}/apps/vue",
+  sourceMaps = true,
+}
+for _, ft in ipairs({ "javascript", "typescript", "vue" }) do
+  local configs = dap.configurations[ft] or {}
+  local present = false
+  for _, c in ipairs(configs) do
+    if c.name == herole_chrome.name then
+      present = true
+      break
+    end
+  end
+  if not present then
+    table.insert(configs, 1, herole_chrome)
+    dap.configurations[ft] = configs
+  end
+end
+
 -- VIM TEST
 -- somehow vim test do not recognize vitest out of the box. This fix the problem
 vim.g["test#javascript#runner"] = "vitest"

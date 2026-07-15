@@ -3,7 +3,9 @@
 return {
   "nvimdev/lspsaga.nvim",
   config = function()
-    require("lspsaga").setup({})
+    require("lspsaga").setup({
+      ui = { code_action = "" },
+    })
 
     vim.keymap.set("n", "T", "<cmd>Lspsaga peek_type_definition<cr>", { desc = "Show [T]ype definition in detail" })
     vim.keymap.set("n", "<leader>ca", "<cmd>Lspsaga code_action<cr>", { desc = "[C]ode [A]ction" })
