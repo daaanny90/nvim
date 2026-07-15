@@ -27,9 +27,14 @@ return {
     {
       "<leader>ta",
       function()
-        require("neotest").run.run(vim.uv.cwd())
+        -- in monorepos (herole) vitest lives in the package, not the repo
+        -- root: run the nearest package.json dir above the current file
+        local file_dir = vim.fn.expand("%:p:h")
+        local pkg = vim.fs.find("package.json", { upward = true, path = file_dir })[1]
+        local dir = pkg and vim.fs.dirname(pkg) or vim.uv.cwd()
+        require("neotest").run.run(dir)
       end,
-      desc = "Test all (cwd)",
+      desc = "Test all (nearest package)",
     },
     {
       "<leader>tl",
