@@ -28,11 +28,12 @@ return {
       callback = dap_sign_colors,
     })
 
-    vim.fn.sign_define("DapBreakpoint", { text = "", texthl = "DapBreakpoint" })
-    vim.fn.sign_define("DapBreakpointCondition", { text = "", texthl = "DapBreakpointCondition" })
-    vim.fn.sign_define("DapBreakpointRejected", { text = "", texthl = "DapBreakpointRejected" })
-    vim.fn.sign_define("DapLogPoint", { text = "", texthl = "DapLogPoint" })
-    vim.fn.sign_define("DapStopped", { text = "", texthl = "DapStopped", linehl = "Visual" })
+    -- glyphs as \u{} escapes: nerd-font PUA chars don't survive some editors
+    vim.fn.sign_define("DapBreakpoint", { text = "\u{f111}", texthl = "DapBreakpoint" })
+    vim.fn.sign_define("DapBreakpointCondition", { text = "\u{f192}", texthl = "DapBreakpointCondition" })
+    vim.fn.sign_define("DapBreakpointRejected", { text = "\u{f05e}", texthl = "DapBreakpointRejected" })
+    vim.fn.sign_define("DapLogPoint", { text = "\u{f05a}", texthl = "DapLogPoint" })
+    vim.fn.sign_define("DapStopped", { text = "\u{f04b}", texthl = "DapStopped", linehl = "Visual" })
 
     -- js-debug (vscode-js-debug, installed via mason): one adapter serves both
     -- node processes (pwa-node) and browser debugging (pwa-chrome)
