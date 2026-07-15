@@ -81,6 +81,19 @@ return { -- Autoformat
           condition = function(_, ctx)
             return project_has(ctx, eslint_configs)
           end,
+          -- pnpm keeps peer plugins of legacy shareable configs (FlatCompat
+          -- extends "standard" in kundenportal) in node_modules/.pnpm/node_modules,
+          -- unreachable from the daemon's plain require walk: expose it via
+          -- NODE_PATH. Read at daemon spawn — if formatting still fails after
+          -- the daemon was first started in another project, `eslint_d restart`.
+          env = function(_, ctx)
+            for dir in vim.fs.parents(ctx.filename) do
+              local hoist = dir .. "/node_modules/.pnpm/node_modules"
+              if vim.uv.fs_stat(hoist) then
+                return { NODE_PATH = hoist }
+              end
+            end
+          end,
         },
       },
     }
