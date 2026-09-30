@@ -430,3 +430,18 @@ vim.api.nvim_create_user_command("RestartLsp", lsp_restart, {
 
 -- Optional: Add a keymap (you can change this to whatever you prefer)
 vim.keymap.set("n", "<leader>lr", lsp_restart, { desc = "[L]sp [R]estart" })
+
+---------------------------------------------------
+------------------ Theme picker -------------------
+---------------------------------------------------
+-- Floating picker over the entries of lua/colorscheme-choice.lua: live preview
+-- on cursor move, <CR> persists the choice and syncs the paired tmux theme.
+local function theme_picker()
+  require("theme-picker").open()
+end
+
+vim.api.nvim_create_user_command("ThemePicker", theme_picker, {
+  desc = "Pick colorscheme (nvim + tmux) in a floating window",
+})
+
+vim.keymap.set("n", "<leader>uc", theme_picker, { desc = "[U]I [C]olorscheme picker" })
