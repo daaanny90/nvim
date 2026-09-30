@@ -313,11 +313,9 @@ return {
     end,
   },
 
-  -- Local: Zed editor look-alike + custom variants (see zed-nvim/lua/zed/palette.lua)
+  -- Zed editor look-alike + custom variants (dev clone: ~/codice/incubatore/nvim-themes/zed.nvim)
   {
-    "zed-nvim",
-    dir = vim.fn.stdpath("config") .. "/lua/plugins/my-plugins/zed-nvim",
-    name = "zed-nvim",
+    "daaanny90/zed.nvim",
     lazy = false,
     priority = 1000,
   },
