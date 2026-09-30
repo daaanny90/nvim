@@ -7,8 +7,9 @@
 -- vim.cmd.colorscheme("zed-one-dark")
 -- vim.cmd.colorscheme("zed-ayu-mirage")
 -- vim.cmd.colorscheme("zed-graph-paper")
-vim.cmd.colorscheme("zed-oscilloscope")
+-- vim.cmd.colorscheme("zed-oscilloscope")
 -- vim.cmd.colorscheme("zed-blueprint")
+vim.cmd.colorscheme("zed-macos-classic-dark")
 
 -- TOKYONIGHT variants
 -- vim.cmd.colorscheme("tokyonight")
