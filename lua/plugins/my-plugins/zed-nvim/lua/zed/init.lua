@@ -6,6 +6,7 @@
 --   :colorscheme zed-graph-paper  -> custom drafting-mat palette
 --   :colorscheme zed-oscilloscope -> custom graphite + phosphor green
 --   :colorscheme zed-blueprint    -> custom Prussian blue + ice cyan
+--   :colorscheme zed-macos-classic-dark -> Zed extension "macOS Classic Dark"
 -- Supports Treesitter, LSP semantic tokens, and popular plugins.
 
 local M = {}

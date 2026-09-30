@@ -7,7 +7,8 @@
 --   * "oscilloscope" -> custom (graphite instrument body, phosphor-green
 --                       accent, amber/cyan trace channels)
 --   * "blueprint"   -> custom (Prussian-blue cyanotype, ice-cyan accent)
--- One Dark / Ayu Mirage hex values taken verbatim from Zed's theme JSON
+--   * "macos-classic-dark" -> Zed "macOS Classic Dark" (macos-classic extension)
+-- One Dark / Ayu Mirage / macOS Classic Dark hex values taken verbatim from Zed's theme JSON
 -- (zed-industries/zed); graph-paper is an original palette in Zed's style.
 -- Keys are SEMANTIC (by role, not hue) so a single groups.lua maps every
 -- highlight group once while each variant supplies its own authentic color.
@@ -421,6 +422,97 @@ M["blueprint"] = {
     br_magenta = "#c7b0d6",
     br_cyan = "#a6d8dc",
     br_white = "#e8edf2",
+  },
+}
+
+M["macos-classic-dark"] = {
+  -- Hex values from the "macos-classic" Zed extension
+  -- (extensions/installed/macos-classic/themes/macos-classic.json,
+  -- theme "macOS Classic Dark"): near-black paper, gold/amber code,
+  -- classic-Terminal green strings, rust-orange types.
+  -- UI surfaces
+  bg = "#131313", -- editor.background
+  bg_dark = "#232323", -- tab_bar.background (inactive tabs, bufferline fill)
+  bg_float = "#1e1d1e", -- elevated_surface.background (floats, popups)
+  bg_highlight = "#272727", -- editor.active_line.background
+  bg_popup = "#1e1d1e",
+  bg_sidebar = "#1e1d1e", -- panel.background (Zed keeps panels raised here)
+  bg_statusline = "#272727", -- status_bar.background
+  bg_visual = "#463e2d", -- accent amber @22% blended over bg
+  bg_selected = "#353436", -- element.selected (menu selection)
+  -- Foreground / gutter
+  fg = "#dddddd", -- editor.foreground
+  fg_dark = "#9e9e9e", -- text.muted
+  fg_gutter = "#8f8f8f", -- editor.line_number
+  fg_sidebar = "#9e9e9e",
+  fg_active_nr = "#9e9e9e", -- active_line_number
+  -- Chrome
+  comment = "#9e9e9e",
+  border = "#404040",
+  -- players[0] in the extension is an untouched template leftover (cyan
+  -- #72cffe, same as Ayu Mirage) — the theme's real signature is the amber
+  -- gold of functions/titles, so cursor + accent use that instead.
+  cursor = "#fdd888",
+  accent = "#fdd888",
+  -- Status / diagnostics
+  error = "#c74028", -- terminal.ansi.red
+  warning = "#f1c464",
+  info = "#7faef9", -- link_uri
+  hint = "#8f8f8f",
+  ok = "#62ba46", -- terminal.ansi.green
+  -- Git / VCS
+  git_add = "#62ba46",
+  git_change = "#b0a878", -- modified
+  git_delete = "#c74028",
+  diff_add = "#0c4619", -- created.background
+  diff_change = "#3a310e", -- modified.background
+  diff_delete = "#46190c", -- deleted.background
+  diff_text = "#4d4113",
+  -- Syntax (by role)
+  s_keyword = "#c28b12", -- dark gold
+  s_func = "#fdd888", -- amber
+  s_string = "#62ba46", -- classic Terminal green
+  s_type = "#c75828", -- rust orange
+  s_number = "#e1d797",
+  s_constant = "#e1d797",
+  s_var = "#caccca",
+  s_property = "#caccca",
+  s_param = "#caccca",
+  s_operator = "#caccca",
+  s_tag = "#b5af9a",
+  s_attribute = "#e7cb8f",
+  s_constructor = "#b5af9a",
+  s_preproc = "#c28b12",
+  s_punct = "#b5b5b5",
+  s_title = "#fdd888",
+  s_special = "#e1d797", -- string.special / regex
+  s_escape = "#9e9e9e", -- comment.doc (shared key; escapes stay muted)
+  s_builtin = "#e19773", -- variable.special
+  s_namespace = "#caccca",
+  s_label = "#e7cb8f",
+  s_link = "#7faef9", -- link_uri
+  s_link_text = "#307bf6",
+  none = "NONE",
+  -- Terminal ANSI (from terminal.ansi.*; the extension swaps black/white —
+  -- black = #DDDDDD, white = #131313 — which breaks :terminal, so those two
+  -- slots are set sanely and every hue slot stays verbatim)
+  terminal = {
+    black = "#131313",
+    red = "#c74028",
+    green = "#62ba46",
+    yellow = "#ded9b7",
+    blue = "#c28b12",
+    magenta = "#c72855",
+    cyan = "#fdd888",
+    white = "#caccca",
+    br_black = "#57564f",
+    br_red = "#e7988a",
+    br_green = "#b0dca2",
+    br_yellow = "#f0edde",
+    br_blue = "#f1c464",
+    br_magenta = "#efb0c2",
+    br_cyan = "#fef1d5",
+    br_white = "#dddddd",
   },
 }
 
