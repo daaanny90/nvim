@@ -12,7 +12,7 @@ vim.api.nvim_create_autocmd("TextYankPost", {
 -- [[ Install `lazy.nvim` plugin manager ]]
 --    See `:help lazy.nvim.txt` or https://github.com/folke/lazy.nvim for more info
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
-if not vim.loop.fs_stat(lazypath) then
+if not vim.uv.fs_stat(lazypath) then
   local lazyrepo = "https://github.com/folke/lazy.nvim.git"
   local out = vim.fn.system({ "git", "clone", "--filter=blob:none", "--branch=stable", lazyrepo, lazypath })
   if vim.v.shell_error ~= 0 then
@@ -29,11 +29,16 @@ vim.defer_fn(function()
   end
   vim.fn.jobstart({ "brew", "outdated", "neovim" }, {
     stdout_buffered = true,
-    on_exit = function(_, exit_code)
-      if exit_code == 0 then
-        vim.schedule(function()
-          vim.g.nvim_update_available = true
-        end)
+    -- `brew outdated <formula>` prints the name only when an update exists
+    -- (and exits 0 when up to date), so key off stdout, not the exit code.
+    on_stdout = function(_, data)
+      for _, line in ipairs(data or {}) do
+        if line ~= "" then
+          vim.schedule(function()
+            vim.g.nvim_update_available = true
+          end)
+          return
+        end
       end
     end,
   })

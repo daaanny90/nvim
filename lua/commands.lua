@@ -233,7 +233,7 @@ local function run_pre_commit_checks()
     vim.notify(string.format(" Running: %s", check.name), vim.log.levels.INFO)
 
     local output_lines = {}
-    local last_update = vim.loop.now()
+    local last_update = vim.uv.now()
     local update_interval = 100 -- Update display every 100ms
 
     -- Run the check
@@ -252,7 +252,7 @@ local function run_pre_commit_checks()
             end
           end
           -- Throttle updates to avoid too many redraws
-          local now = vim.loop.now()
+          local now = vim.uv.now()
           if now - last_update > update_interval then
             update_display()
             last_update = now
@@ -269,7 +269,7 @@ local function run_pre_commit_checks()
             end
           end
           -- Throttle updates to avoid too many redraws
-          local now = vim.loop.now()
+          local now = vim.uv.now()
           if now - last_update > update_interval then
             update_display()
             last_update = now

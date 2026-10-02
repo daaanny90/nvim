@@ -28,6 +28,15 @@ return {
           map("gd", lsp_picker("lsp_definitions"), "[G]oto [D]efinition")
           map("gr", lsp_picker("lsp_references"), "[G]oto [R]eferences")
           map("gI", lsp_picker("lsp_implementations"), "[G]oto [I]mplementation")
+
+          -- Nvim 11 ships global defaults grr/gri/grt that dump results into the
+          -- quickfix window (botright copen). Shadow them buffer-locally so they
+          -- open Telescope too — otherwise `gr` waits timeoutlen for the longer
+          -- global mapping and an impatient second `r` lands in the quickfix list.
+          map("grr", lsp_picker("lsp_references"), "[G]oto [R]eferences")
+          map("gri", lsp_picker("lsp_implementations"), "[G]oto [I]mplementation")
+          map("grt", lsp_picker("lsp_type_definitions"), "Goto [T]ype Definition")
+
           map("<leader>D", vim.lsp.buf.type_definition, "Type [D]efinition")
           map("<leader>ds", require("telescope.builtin").lsp_document_symbols, "[D]ocument [S]ymbols")
           map("<leader>ws", require("telescope.builtin").lsp_dynamic_workspace_symbols, "[W]orkspace [S]ymbols")
