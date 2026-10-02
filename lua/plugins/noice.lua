@@ -22,6 +22,12 @@ return {
         },
         view = 'mini',
       },
+      {
+        -- Safety net: swallow minuet's raw "Request failed with exit code N" (Ollama
+        -- down). lua/localai.lua shows a single friendly notice instead.
+        filter = { event = 'notify', find = 'Request failed with exit code' },
+        opts = { skip = true },
+      },
     },
     -- you can enable a preset for easier configuration
     presets = {
