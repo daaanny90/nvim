@@ -2,6 +2,9 @@
 -- Usage: vif (visual inside function), daf (delete around function), cic (change inside class), via (inside argument)
 return {
   "nvim-treesitter/nvim-treesitter-textobjects",
+  -- Pin to `master` to match nvim-treesitter: the `main` rewrite drops the
+  -- `nvim-treesitter.configs` module this spec configures, silently disabling these keymaps.
+  branch = "master",
   dependencies = { "nvim-treesitter/nvim-treesitter" },
   event = { "BufReadPost", "BufNewFile" },
   config = function()
