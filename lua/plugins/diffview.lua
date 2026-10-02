@@ -20,9 +20,20 @@ return {
     enhanced_diff_hl = true, -- dim the filler areas, stronger hl on changed regions
     hooks = {
       diff_buf_win_enter = function(_, winid)
-        -- less gutter noise inside diff windows
-        vim.wo[winid].foldcolumn = "0"
-        vim.wo[winid].relativenumber = false
+        -- Less gutter noise inside diff windows. Go through diffview's own
+        -- Window:use_winopts() instead of vim.wo[winid]: diffview saves the
+        -- original values and restores them when the file is unloaded. Setting
+        -- the options directly leaks them into Neovim's per-buffer window-option
+        -- memory (see :h local-options), so a file reviewed in diffview would
+        -- later reopen in a normal window with 'relativenumber' off.
+        local view = require("diffview.lib").get_current_view()
+        local windows = view and view.cur_layout and view.cur_layout.windows or {}
+        for _, win in ipairs(windows) do
+          if win.id == winid then
+            win:use_winopts({ foldcolumn = "0", relativenumber = false })
+            break
+          end
+        end
       end,
     },
     keymaps = {
