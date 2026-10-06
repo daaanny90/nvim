@@ -320,6 +320,14 @@ return {
     priority = 1000,
   },
 
+  -- Interlinked: Blade Runner 2049 — melancholic fog & amber, with ambient fx
+  -- (dev clone: ~/codice/incubatore/nvim-themes/interlinked.nvim)
+  {
+    "daaanny90/interlinked.nvim",
+    lazy = false,
+    priority = 1000,
+  },
+
   -- ============================================================================
   -- COLORSCHEME SELECTION
   -- To change colorscheme, edit: lua/colorscheme-choice.lua

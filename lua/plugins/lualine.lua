@@ -54,6 +54,35 @@ local function mason_updates()
   return ""
 end
 
+-- Marquee (banda scorrevole infinita) dal tema interlinked; se il modulo non
+-- c'è degrada a testo statico. Scorre solo quando il testo supera la finestra.
+local function marquee(text, width)
+  local ok, mq = pcall(require, "interlinked.marquee")
+  return ok and mq.scroll(text, width) or text
+end
+
+local function branch_marquee()
+  local head = vim.b.gitsigns_head
+  if not head or head == "" then
+    return ""
+  end
+  return marquee(head, 24)
+end
+
+local function filename_marquee()
+  local name = vim.fn.expand("%:~:.")
+  if name == "" then
+    name = "[No Name]"
+  end
+  local suffix = ""
+  if vim.bo.modified then
+    suffix = " []"
+  elseif vim.bo.readonly or not vim.bo.modifiable then
+    suffix = " "
+  end
+  return marquee(name, 44) .. suffix
+end
+
 return {
   "nvim-lualine/lualine.nvim",
   event = "VeryLazy",
@@ -65,8 +94,11 @@ return {
     else
       vim.o.laststatus = 0
     end
-    -- Garantisce che LualineLsp esista (sfondo blu, testo bianco) per i componenti LSP
-    vim.api.nvim_set_hl(0, "LualineLsp", { fg = "#FFFFFF", bg = "#2563EB" })
+    -- Garantisce che LualineLsp esista per i componenti LSP: fallback
+    -- blu/bianco solo se il tema attivo non lo definisce già
+    if vim.tbl_isempty(vim.api.nvim_get_hl(0, { name = "LualineLsp" })) then
+      vim.api.nvim_set_hl(0, "LualineLsp", { fg = "#FFFFFF", bg = "#2563EB" })
+    end
   end,
   opts = function()
     vim.o.laststatus = vim.g.lualine_laststatus
@@ -91,7 +123,7 @@ return {
             "VimResized",
             "Filetype",
             "ModeChanged",
-            "DiagnosticChanged",  -- quando cambiano errori/warning LSP
+            "DiagnosticChanged", -- quando cambiano errori/warning LSP
             "User LspAttach",
             "User LspDetach",
           },
@@ -100,7 +132,7 @@ return {
       sections = {
         lualine_a = { "mode" },
         lualine_b = {
-          { "b:gitsigns_head", icon = { "" } },
+          { branch_marquee, icon = { "" } },
           {
             "diff",
             source = diff_source,
@@ -121,13 +153,15 @@ return {
           },
         },
         lualine_c = {
-          { "filename", path = 1, symbols = { modified = "[]", readonly = " " } },
+          { filename_marquee },
           { "lsp_progress", display_components = { "lsp_client_name" } },
         },
         lualine_x = {
           {
             mason_updates,
-            cond = function() return (vim.g.mason_outdated_count or 0) > 0 end,
+            cond = function()
+              return (vim.g.mason_outdated_count or 0) > 0
+            end,
             color = { fg = "#D4A84B" },
           },
           {
@@ -135,7 +169,9 @@ return {
               local n = require("lazy.status").updates()
               return (type(n) == "string" or (type(n) == "number" and n > 0)) and tostring(n) or ""
             end,
-            cond = function() return require("lazy.status").has_updates() end,
+            cond = function()
+              return require("lazy.status").has_updates()
+            end,
             color = { fg = "#D4A84B" },
           },
           {
@@ -165,30 +201,35 @@ return {
           { "progress", separator = " ", padding = { left = 1, right = 0 } },
           { current_working_dir },
         },
-        lualine_z = vim.iter({
-          (function()
-            local out = {}
-            for i = 1, 6 do
-              out[i] = {
-                lsp_client_at(i),
-                cond = function()
-                  local clients = vim.lsp.get_clients({ bufnr = 0 })
-                  local idx = 0
-                  for _ in ipairs(clients) do
-                    idx = idx + 1
-                    if idx == i then return true end
-                  end
-                  return false
-                end,
-                separator = " ",
-                padding = { left = 1, right = 1 },
-                color = "LualineLsp",
-              }
-            end
-            return out
-          end)(),
-          { "location" },
-        }):flatten():totable(),
+        lualine_z = vim
+          .iter({
+            (function()
+              local out = {}
+              for i = 1, 6 do
+                out[i] = {
+                  lsp_client_at(i),
+                  cond = function()
+                    local clients = vim.lsp.get_clients({ bufnr = 0 })
+                    local idx = 0
+                    for _ in ipairs(clients) do
+                      idx = idx + 1
+                      if idx == i then
+                        return true
+                      end
+                    end
+                    return false
+                  end,
+                  separator = " ",
+                  padding = { left = 1, right = 1 },
+                  color = "LualineLsp",
+                }
+              end
+              return out
+            end)(),
+            { "location" },
+          })
+          :flatten()
+          :totable(),
       },
       inactive_sections = {
         lualine_a = {},

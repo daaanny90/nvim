@@ -3,13 +3,16 @@
 -- Uncomment ONE line below to activate a colorscheme
 -- ============================================================================
 
+-- INTERLINKED (custom - Blade Runner 2049: LA fog, Vegas amber, hologram cyan)
+vim.cmd.colorscheme("interlinked")
+
 -- ZED (recreates the Zed editor experience — switch between the variants)
 -- vim.cmd.colorscheme("zed-one-dark")
 -- vim.cmd.colorscheme("zed-ayu-mirage")
 -- vim.cmd.colorscheme("zed-graph-paper")
 -- vim.cmd.colorscheme("zed-oscilloscope")
 -- vim.cmd.colorscheme("zed-blueprint")
-vim.cmd.colorscheme("zed-macos-classic-dark")
+-- vim.cmd.colorscheme("zed-macos-classic-dark")
 
 -- TOKYONIGHT variants
 -- vim.cmd.colorscheme("tokyonight")
@@ -143,8 +146,11 @@ local function apply_custom_highlights()
   vim.cmd([[highlight DiagnosticSignInfo guibg=NONE ctermbg=NONE]])
   vim.cmd([[highlight DiagnosticSignHint guibg=NONE ctermbg=NONE]])
 
-  -- LSP in lualine: sfondo blu, testo bianco (come line:col)
-  vim.api.nvim_set_hl(0, "LualineLsp", { fg = "#FFFFFF", bg = "#2563EB" })
+  -- LSP in lualine: fallback blu/bianco SOLO se il tema attivo non definisce
+  -- già LualineLsp (es. interlinked lo ridefinisce nei suoi colori)
+  if vim.tbl_isempty(vim.api.nvim_get_hl(0, { name = "LualineLsp" })) then
+    vim.api.nvim_set_hl(0, "LualineLsp", { fg = "#FFFFFF", bg = "#2563EB" })
+  end
 end
 
 -- Apply highlights now
