@@ -52,7 +52,7 @@ vim.lsp.enable("jsonls")
 -- Configure YAML Language Server
 vim.lsp.config.yamlls = {
   cmd = { "yaml-language-server", "--stdio" },
-  filetypes = { "yaml", "yaml.docker-compose", "yaml.gitlab" },
+  filetypes = { "yaml" }, -- Nvim 0.12 detects compose/gitlab-ci files as plain `yaml`
   root_markers = { ".git" },
   capabilities = capabilities,
   settings = {

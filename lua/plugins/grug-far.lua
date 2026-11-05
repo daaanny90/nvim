@@ -1,6 +1,6 @@
 return {
   "MagicDuck/grug-far.nvim",
-  opts = { headerMaxWidth = 80 },
+  opts = {},
   cmd = "GrugFar",
   init = function()
     vim.api.nvim_create_autocmd("FileType", {

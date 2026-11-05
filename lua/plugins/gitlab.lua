@@ -115,8 +115,8 @@ return {
       size = "35%",
     },
     discussion_signs = {
-      -- Threads are published as INFO diagnostics, which options.lua's
-      -- `virtual_lines = { current_line = true }` then renders under the cursor line.
+      -- Threads are published as INFO diagnostics. options.lua turns virtual_lines off and
+      -- tiny-inline-diagnostic only attaches on LspAttach, so diffview buffers get signs only.
       enabled = true,
       virtual_text = false,
       use_diagnostic_signs = true,
