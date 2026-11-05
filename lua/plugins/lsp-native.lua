@@ -41,7 +41,7 @@ return {
           map("<leader>ds", require("telescope.builtin").lsp_document_symbols, "[D]ocument [S]ymbols")
           map("<leader>ws", require("telescope.builtin").lsp_dynamic_workspace_symbols, "[W]orkspace [S]ymbols")
           map("<leader>cr", vim.lsp.buf.rename, "[R]ename")
-          map("<leader>cl", "<cmd>LspInfo<cr>", "[L]sp info")
+          map("<leader>cl", "<cmd>checkhealth vim.lsp<cr>", "[L]sp info") -- :LspInfo is gone on Nvim 0.12
           map("<leader>ca", vim.lsp.buf.code_action, "[C]ode [A]ction")
           map("K", vim.lsp.buf.hover, "Hover Documentation")
           map("gD", vim.lsp.buf.declaration, "[G]oto [D]eclaration")
