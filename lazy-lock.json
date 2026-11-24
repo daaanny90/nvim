@@ -65,7 +65,6 @@
   "nvim-ts-autotag": { "branch": "main", "commit": "d7220b55e16ed3c04e88086256def5d282429493" },
   "nvim-ufo": { "branch": "main", "commit": "ab3eb124062422d276fae49e0dd63b3ad1062cfc" },
   "nvim-web-devicons": { "branch": "master", "commit": "ec309a0eaff6ea967e58c275996155ab5c16938d" },
-  "obsidian.nvim": { "branch": "main", "commit": "a562bedd7b418a289b005cb4c62b1fe79066253b" },
   "onedarkpro.nvim": { "branch": "main", "commit": "24c806cb85c1f84d9faaff457cf7aa87c685a070" },
   "oxocarbon.nvim": { "branch": "main", "commit": "cd6523a0836d6e8ee823d343149fd06c7b71fdde" },
   "package-info.nvim": { "branch": "master", "commit": "b86cf49efc3855dd94afb33304b278f6f122bf1a" },
